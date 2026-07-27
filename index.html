@@ -12,29 +12,85 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#20261f;
-    --paper:#f6f3ea;
-    --paper-2:#eee8d8;
-    --forest:#2f4a3a;
-    --forest-deep:#1c2f24;
-    --gold:#b8863a;
-    --gold-soft:#e3c690;
-    --line: rgba(32,38,31,0.14);
-    --red:#a8503f;
-    --past:#a49d8f;
-    --past-bg:#e6e1d3;
-    --today-bg:#2f4a3a;
-    --future-bg:#e0b23c;
+    --ink:#4a3d33;
+    --paper:#faf5ee;
+    --paper-2:#f1e8db;
+    --forest:#8ba173;
+    --forest-deep:#4b5a3f;
+    --gold:#c98a63;
+    --gold-soft:#f2ddc8;
+    --line: rgba(74,61,51,0.15);
+    --red:#b5533f;
+    --holiday:#a80000;
+    --lilac:#f7ede1;
+    --lilac-text:#8a6a4e;
+    --past-bg:#cdc6ba;
+    --today-bg:#a9bb95;
+    --today-text:#23301c;
+    --future-bg:#e6c9b4;
+    --future-text:#6b4632;
+  }
+  html[data-theme="dark"]{
+    --ink:#f3ece1;
+    --paper:#241f1b;
+    --paper-2:#332c25;
+    --line: rgba(255,255,255,0.14);
+    --holiday:#ff2d2d;
+    --lilac:#4a3f34;
+    --lilac-text:#f2ddc8;
+    --past-bg:#3d362f;
+    --today-bg:#5f7350;
+    --today-text:#eef4e6;
+    --future-bg:#6b4a3a;
+    --future-text:#f2ddc8;
+    --gold-soft:#4a3f34;
   }
   *{box-sizing:border-box;}
+  html, body{ background: var(--paper); }
   body{
     margin:0;
-    background: var(--paper);
+    position:relative;
     font-family:'Vazirmatn', sans-serif;
     color: var(--ink);
     min-height:100vh;
+    transition: background .2s, color .2s;
   }
-  .wrap{ max-width: 720px; margin: 0 auto; padding: calc(16px + env(safe-area-inset-top)) 14px calc(60px + env(safe-area-inset-bottom)); }
+  .wrap{ max-width: 720px; margin: 0 auto; padding: calc(16px + env(safe-area-inset-top)) 6px calc(60px + env(safe-area-inset-bottom)); position:relative; }
+
+  /* Glassmorphism base — strong glossy highlight, translucency, and colored glow (like iOS glass UI) */
+  .pill-btn, .theme-btn, .nav-btn, .add-btn, .alarm-btn, .notif-btn,
+  .health-tab, .quick-nav-btn, .alarm-save-btn, .save-btn-top, .toast-close,
+  .modal-close, .expense-remove, .income-remove, .gym-remove, .cal-meal-remove {
+    background-image: linear-gradient(155deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.25) 40%, rgba(255,255,255,0.05) 70%);
+    backdrop-filter: blur(16px) saturate(190%);
+    -webkit-backdrop-filter: blur(16px) saturate(190%);
+    border: 1.5px solid rgba(255,255,255,0.75);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10), inset 0 1.5px 1px rgba(255,255,255,0.9), inset 0 -8px 12px -8px rgba(0,0,0,0.10);
+    transition: transform .12s;
+  }
+  .pill-btn:active, .theme-btn:active, .add-btn:active, .alarm-btn:active,
+  .health-tab:active, .quick-nav-btn:active, .alarm-save-btn:active, .save-btn-top:active {
+    transform: scale(0.96);
+  }
+  html[data-theme="dark"] .pill-btn, html[data-theme="dark"] .theme-btn,
+  html[data-theme="dark"] .nav-btn, html[data-theme="dark"] .add-btn,
+  html[data-theme="dark"] .alarm-btn, html[data-theme="dark"] .notif-btn,
+  html[data-theme="dark"] .health-tab, html[data-theme="dark"] .quick-nav-btn,
+  html[data-theme="dark"] .alarm-save-btn, html[data-theme="dark"] .save-btn-top,
+  html[data-theme="dark"] .toast-close, html[data-theme="dark"] .modal-close {
+    background-image: linear-gradient(155deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 40%, rgba(255,255,255,0) 70%);
+    border-color: rgba(255,255,255,0.28);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4), inset 0 1.5px 1px rgba(255,255,255,0.2), inset 0 -8px 12px -8px rgba(0,0,0,0.3);
+  }
+
+  /* colored ambient glow per button type — this is what makes the glass read as glass */
+  .save-btn-top, .add-btn, .alarm-save-btn{ box-shadow: 0 6px 20px color-mix(in srgb, var(--forest) 55%, transparent), inset 0 1.5px 1px rgba(255,255,255,0.9), inset 0 -8px 12px -8px rgba(0,0,0,0.1); }
+  .alarm-btn{ box-shadow: 0 6px 20px color-mix(in srgb, var(--gold) 55%, transparent), inset 0 1.5px 1px rgba(255,255,255,0.9), inset 0 -8px 12px -8px rgba(0,0,0,0.1); }
+  .health-tab.active{ box-shadow: 0 6px 20px color-mix(in srgb, var(--forest) 55%, transparent), inset 0 1.5px 1px rgba(255,255,255,0.9), inset 0 -8px 12px -8px rgba(0,0,0,0.1); }
+  .pill-btn, .theme-btn, .nav-btn, .notif-btn, .quick-nav-btn, .health-tab:not(.active), .modal-close, .toast-close{
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--gold) 30%, transparent), inset 0 1.5px 1px rgba(255,255,255,0.9), inset 0 -8px 12px -8px rgba(0,0,0,0.08);
+  }
+
 
   .topbar{
     display:flex; align-items:center; justify-content:space-between;
@@ -48,17 +104,27 @@
     cursor:pointer; padding:6px 4px;
     opacity:1;
   }
+  html[data-theme="dark"] .icon-btn{ color: var(--ink); }
   .icon-btn[disabled]{ opacity:0.3; cursor:default; }
   .pill-btn{
-    background: var(--paper-2);
+    background-color: color-mix(in srgb, var(--paper-2) 60%, transparent);
     border:1px solid var(--line);
-    color: var(--forest-deep);
+    color: var(--ink);
     font-weight:700; font-size:12px;
     font-family:'Vazirmatn',sans-serif;
     border-radius:20px;
     padding:7px 14px;
     cursor:pointer;
   }
+  .theme-btn{
+    background-color: color-mix(in srgb, var(--paper-2) 60%, transparent);
+    border:1px solid var(--line);
+    border-radius:50%;
+    width:34px; height:34px;
+    font-size:15px;
+    cursor:pointer;
+  }
+  .topbar-right{ display:flex; gap:8px; align-items:center; }
 
   .titlebar{
     display:flex; align-items:center; justify-content:space-between;
@@ -66,47 +132,57 @@
   }
   .nav-btn{
     width:36px; height:36px; border-radius:50%;
-    border:1px solid var(--line); background: var(--paper-2);
-    color:var(--forest-deep); font-size:17px;
+    border:1px solid var(--line); background-color: color-mix(in srgb, var(--paper-2) 60%, transparent);
+    color:var(--ink); font-size:17px;
     display:flex; align-items:center; justify-content:center;
     cursor:pointer; flex-shrink:0;
   }
   .nav-btn:active{ transform: scale(0.92); }
   .title-block{ text-align:center; flex:1; }
-  .title-main{ font-size:20px; font-weight:800; color:var(--forest-deep); }
-  .title-sub{ font-size:11px; color:var(--gold); font-weight:600; margin-top:2px; letter-spacing:.5px; }
+  .title-main{ font-size:28px; font-weight:800; color:var(--ink); letter-spacing:-.3px; }
+  .title-sub{ font-size:12px; color:var(--gold); font-weight:700; margin-top:3px; letter-spacing:.5px; }
 
   .legend{
-    display:flex; gap:14px; justify-content:center;
-    font-size:10.5px; color:var(--forest-deep); opacity:0.75;
+    display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
+    font-size:10.5px; color:var(--ink); opacity:0.8;
     margin-bottom:14px;
   }
   .legend span{ display:flex; align-items:center; gap:4px; }
   .dotleg{ width:8px; height:8px; border-radius:50%; display:inline-block; }
 
   /* MONTH VIEW */
-  .weekdays{ display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:6px; }
-  .weekdays div{ text-align:center; font-size:11px; font-weight:700; color:var(--forest); opacity:0.7; padding-bottom:6px; }
-  .grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
-  .day{
-    position:relative; border-radius:12px;
-    border:1px solid var(--line); padding:5px 4px;
-    cursor:pointer; min-height:70px;
-    display:flex; flex-direction:column; justify-content:flex-start; gap:2px;
-    background: var(--past-bg); color: var(--ink);
+  .weekdays{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:8px; }
+  .weekdays div{
+    text-align:center; font-size:11px; font-weight:800; color:var(--lilac-text);
+    background:var(--lilac); border-radius:8px; padding:6px 0;
   }
-  .day.empty{ background:transparent; border:none; cursor:default; min-height:0; }
-  .day.status-today{ background: var(--today-bg); color:var(--paper); }
-  .day.status-future{ background: var(--future-bg); color:var(--forest-deep); }
-  .day.status-past{ background: var(--past-bg); color:var(--ink); opacity:0.85; }
-  .day .num{ font-size:13px; font-weight:700; }
-  .day .frac{ font-size:8px; font-weight:700; opacity:0.85; }
-  .day .note-status{ font-size:7px; line-height:1.25; opacity:0.9; margin-top:1px; }
-  .day .exp-amt{ font-size:7.5px; font-weight:800; margin-top:auto; opacity:0.95; }
+  .grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+  .day{
+    position:relative; border-radius:12px; aspect-ratio:1/1;
+    border:1px solid var(--line); padding:6px 2px;
+    cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+    background: var(--past-bg); color: var(--ink); text-align:center;
+  }
+  .day.empty{ background:transparent; border:none; cursor:default; aspect-ratio:auto; }
+  .day.status-today{ background: var(--today-bg); color:var(--today-text); }
+  .day.status-future{ background: var(--future-bg); color:var(--future-text); }
+  .day.status-past{ background: var(--past-bg); color:var(--ink); opacity:0.9; }
+  .day .num{ font-size:16px; font-weight:800; line-height:1; }
+  .day.is-holiday .num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:21px; height:21px;
+    border:1.6px solid var(--holiday); border-radius:5px;
+    color: var(--holiday); font-weight:800; font-size:12.5px;
+  }
+  .day .bottom-cluster{ display:flex; flex-direction:row; align-items:center; justify-content:center; gap:4px; flex-wrap:wrap; min-height:14px; }
+  .day .frac{ font-size:8.5px; font-weight:800; opacity:1; line-height:1; }
+  .day .exp-amt{ font-size:8px; font-weight:800; opacity:1; line-height:1; }
+  .day .note-emoji{ font-size:13px; line-height:1; }
   .month-total{
     margin-top:16px; background:var(--paper-2); border:1px solid var(--line);
     border-radius:12px; padding:12px 14px; text-align:center;
-    font-size:14px; font-weight:700; color:var(--forest-deep);
+    font-size:14px; font-weight:700; color:var(--ink);
   }
 
   /* WEEK VIEW */
@@ -115,47 +191,89 @@
     background:var(--past-bg); border:1px solid var(--line);
     border-radius:12px; padding:12px; margin-bottom:8px; cursor:pointer;
   }
-  .week-row.status-today{ background: var(--today-bg); color:var(--paper); }
-  .week-row.status-future{ background: var(--future-bg); color:var(--forest-deep); }
-  .week-row.status-past{ background: var(--past-bg); color:var(--ink); opacity:0.85; }
+  .week-row.status-today{ background: var(--today-bg); color:var(--today-text); }
+  .week-row.status-future{ background: var(--future-bg); color:var(--future-text); }
+  .week-row.status-past{ background: var(--past-bg); color:var(--ink); opacity:0.9; }
   .week-row .wd-name{ font-size:13px; font-weight:700; width:60px; }
+  .week-row.is-holiday .wd-name{ color: var(--holiday); }
   .week-row .wd-num{ font-size:18px; font-weight:800; width:26px; }
+  .week-row.is-holiday .wd-num{ color: var(--holiday); }
   .week-row .wd-stats{ flex:1; font-size:11px; opacity:0.85; text-align:left; }
 
   /* DAY VIEW */
-  .day-status-banner{
-    text-align:center; font-size:12px; font-weight:700;
-    border-radius:10px; padding:8px; margin-bottom:14px;
+  .day-header-card{
+    text-align:center; border-radius:14px; padding:12px 14px 13px; margin-bottom:12px;
+  }
+  .dhc-status{ font-size:14px; font-weight:800; }
+  .dhc-dates{ font-size:11px; font-weight:600; opacity:0.8; margin-top:4px; line-height:1.5; }
+  .day-header-card.status-today{ background:var(--today-bg); color:var(--today-text); }
+  .day-header-card.status-future{ background:var(--future-bg); color:var(--future-text); }
+  .day-header-card.status-past{ background:var(--past-bg); color:var(--ink); }
+  .holiday-banner{
+    text-align:center; font-size:12.5px; font-weight:800; color:#fff;
+    background:var(--holiday); border-radius:10px; padding:9px 14px; margin-bottom:10px;
   }
   .quote-banner{
-    text-align:center; font-size:12.5px; font-weight:600; color:var(--forest-deep);
+    text-align:center; font-size:12.5px; font-weight:600; color:var(--ink);
     background:var(--gold-soft); border-radius:10px; padding:10px 14px; margin-bottom:10px;
     line-height:1.7;
   }
-  .day-status-banner.status-today{ background:var(--today-bg); color:var(--paper); }
-  .day-status-banner.status-future{ background:var(--future-bg); color:var(--forest-deep); }
-  .day-status-banner.status-past{ background:var(--past-bg); color:var(--ink); }
 
   .section{ margin-bottom:22px; }
-  .section-title{ font-size:14px; font-weight:800; color:var(--forest-deep); margin-bottom:8px; }
+  .section-title{ font-size:14px; font-weight:800; color:var(--ink); margin-bottom:8px; }
 
+  .task-list{ display:flex; flex-direction:column; }
   .task-row{
     display:flex; align-items:center; gap:8px;
-    padding:9px 4px; border-bottom:1px solid var(--line);
+    padding:6px 2px; border-bottom:1px solid var(--line);
   }
   .task-row:last-child{ border-bottom:none; }
   .task-check{
-    width:22px; height:22px; border-radius:7px; border:2px solid var(--gold);
+    width:19px; height:19px; border-radius:6px; border:2px solid var(--gold);
     flex-shrink:0; display:flex; align-items:center; justify-content:center;
-    cursor:pointer; background:transparent; font-size:13px; color:var(--paper);
+    cursor:pointer; background:transparent; font-size:11px; color:#fff;
   }
-  .task-check.checked{ background:var(--gold); }
-  .task-label{ flex:1; font-size:14px; cursor:pointer; }
-  .task-reminder{
-    border:1px solid var(--line); border-radius:8px; background:var(--paper-2);
-    font-family:'Vazirmatn',sans-serif; font-size:11px; padding:4px 6px; width:78px; color:var(--ink);
+  .task-check.checked{ background:var(--forest); border-color:var(--forest); }
+  .task-label{ flex:1; font-size:13px; cursor:pointer; }
+  .task-row.checked .task-label{ color:var(--forest-deep); font-weight:700; }
+  .task-row .clock-badge{ font-size:10px; opacity:0.8; color:var(--gold); }
+  .task-row .chip-remove{ font-size:12px; opacity:0.55; padding:2px 4px; cursor:pointer; }
+  .alarm-btn{
+    background-color: color-mix(in srgb, var(--gold) 70%, transparent); color:#fff; border:none; border-radius:10px;
+    padding:9px 14px; font-size:12px; font-weight:700; cursor:pointer; margin-top:10px;
   }
-  .task-remove{ background:none; border:none; color:var(--red); font-size:14px; cursor:pointer; opacity:0.5; padding:2px; }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,0.4);
+    display:none; align-items:flex-end; justify-content:center; z-index:200;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-sheet{
+    background:var(--paper); width:100%; max-width:720px; max-height:82vh; overflow-y:auto;
+    border-radius:20px 20px 0 0; padding:20px 18px calc(24px + env(safe-area-inset-bottom));
+  }
+  .modal-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .modal-title{ font-size:16px; font-weight:800; color:var(--ink); }
+  .modal-close{
+    width:32px; height:32px; border-radius:50%; border:none;
+    background-color: color-mix(in srgb, var(--paper-2) 60%, transparent); font-size:16px; cursor:pointer; color:var(--ink);
+  }
+  .alarm-task-row{
+    display:flex; align-items:center; gap:10px; padding:10px 4px; border-bottom:1px solid var(--line);
+  }
+  .alarm-task-row:last-child{ border-bottom:none; }
+  .alarm-task-row input[type=checkbox]{ width:19px; height:19px; accent-color:var(--forest); }
+  .alarm-task-row label{ flex:1; font-size:14px; color:var(--ink); }
+  .alarm-time-row{ margin-top:16px; }
+  .alarm-time-row label{ font-size:12px; font-weight:700; color:var(--ink); opacity:0.75; display:block; margin-bottom:6px; }
+  .alarm-time-row input[type=time]{
+    width:100%; padding:12px; border-radius:10px; border:1px solid var(--line);
+    background:var(--paper-2); font-family:'Vazirmatn',sans-serif; font-size:16px; color:var(--ink);
+  }
+  .alarm-save-btn{
+    margin-top:16px; width:100%; padding:13px; border-radius:12px; border:none;
+    background-color: color-mix(in srgb, var(--forest) 75%, transparent); color:#fff; font-weight:800; font-size:14px; cursor:pointer;
+  }
   .add-row{ display:flex; gap:8px; margin-top:10px; }
   .add-row input{
     flex:1; padding:10px 12px; border-radius:10px; border:1px solid var(--line);
@@ -163,27 +281,38 @@
   }
   .add-row input:focus{ border-color:var(--gold); }
   .add-btn{
-    background:var(--forest); color:var(--paper); border:none; border-radius:10px;
+    background-color: color-mix(in srgb, var(--forest) 75%, transparent); color:#fff; border:none; border-radius:10px;
     padding:0 16px; font-weight:700; font-size:18px; cursor:pointer;
   }
-  .empty-note{ text-align:center; padding:14px 0; color:var(--forest); opacity:0.5; font-size:12px; }
+  .empty-note{ text-align:center; padding:14px 0; color:var(--ink); opacity:0.5; font-size:12px; }
 
   .expense-row{
     display:flex; align-items:center; gap:8px; padding:9px 4px; border-bottom:1px solid var(--line);
   }
   .expense-row:last-child{ border-bottom:none; }
   .expense-desc{ flex:1; font-size:13px; }
-  .expense-amt{ font-size:13px; font-weight:700; color:var(--forest-deep); white-space:nowrap; }
-  .expense-remove{ background:none; border:none; color:var(--red); font-size:14px; cursor:pointer; opacity:0.5; }
-  .add-expense-row{ display:flex; gap:6px; margin-top:10px; }
+  .expense-amt{ font-size:13px; font-weight:700; color:var(--ink); white-space:nowrap; }
+  .expense-remove{ background:none; border:none; color:var(--red); font-size:14px; cursor:pointer; opacity:0.6; }
+  .add-expense-row{ display:flex; gap:6px; margin-top:6px; }
   .add-expense-row input{
     padding:10px 10px; border-radius:10px; border:1px solid var(--line);
     background:var(--paper-2); font-family:'Vazirmatn',sans-serif; font-size:13px; color:var(--ink); outline:none;
   }
   .add-expense-row input.desc{ flex:1; }
   .add-expense-row input.amt{ width:100px; }
+  .gym-copy-row{
+    display:flex; flex-direction:column; gap:6px; margin-top:8px;
+    font-size:11px; color:var(--ink); opacity:0.8;
+  }
+  .gym-copy-row label{ display:flex; align-items:center; gap:6px; cursor:pointer; }
+  .gym-copy-row input[type=checkbox]{ width:16px; height:16px; accent-color:var(--forest); }
+  .gym-group-block{
+    margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--line);
+  }
+  .gym-group-block:last-child{ border-bottom:none; margin-bottom:0; }
+  .gym-group-block .section-title{ margin-bottom:5px; }
   .day-sum{
-    margin-top:10px; text-align:left; font-size:13px; font-weight:800; color:var(--forest-deep);
+    margin-top:10px; text-align:left; font-size:13px; font-weight:800; color:var(--ink);
   }
 
   .note-area{
@@ -194,35 +323,101 @@
   .note-area:focus{ border-color:var(--gold); }
   .save-btn-top{
     display:flex; align-items:center; gap:5px;
-    background: var(--forest); color:var(--paper); border:none;
+    background-color: color-mix(in srgb, var(--forest) 75%, transparent); color:#fff; border:none;
     border-radius:20px; padding:7px 14px; font-weight:700; font-size:12px;
     font-family:'Vazirmatn',sans-serif; cursor:pointer;
   }
 
   .reminder-note{
-    font-size:11px; color:var(--forest); opacity:0.65; margin-top:6px; line-height:1.6;
+    font-size:11px; color:var(--ink); opacity:0.65; margin-top:6px; line-height:1.6;
   }
   .notif-btn{
-    background:var(--paper-2); border:1px solid var(--line); border-radius:10px;
-    padding:8px 12px; font-size:12px; font-weight:700; color:var(--forest-deep);
+    background-color: color-mix(in srgb, var(--paper-2) 60%, transparent); border:1px solid var(--line); border-radius:10px;
+    padding:8px 12px; font-size:12px; font-weight:700; color:var(--ink);
     cursor:pointer; margin-bottom:10px;
   }
 
   .toast{
     position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-    background:var(--forest-deep); color:var(--paper); padding:12px 18px;
-    border-radius:12px; font-size:13px; font-weight:700; box-shadow:0 6px 20px rgba(0,0,0,0.25);
-    z-index:100; display:none;
+    background:var(--forest-deep); color:#fff; padding:10px 10px 10px 16px;
+    border-radius:12px; font-size:13px; font-weight:700; box-shadow:0 6px 20px rgba(0,0,0,0.3);
+    z-index:100; display:none; align-items:center; gap:10px; max-width:90vw;
   }
-  .toast.show{ display:block; }
-  .loading{ text-align:center; padding:40px; color:var(--forest); opacity:0.6; font-size:13px; }
+  .toast.show{ display:flex; }
+  .toast-close{
+    background:rgba(255,255,255,0.15); border:none; color:#fff; border-radius:8px;
+    padding:5px 10px; font-size:12px; font-weight:700; cursor:pointer; flex-shrink:0;
+  }
+  .loading{ text-align:center; padding:40px; color:var(--ink); opacity:0.6; font-size:13px; }
+  .tiny-footer{ text-align:center; font-size:8px; color:var(--ink); opacity:0.3; margin-top:20px; letter-spacing:2px; }
+
+  .quick-nav-row{ display:flex; gap:8px; margin-bottom:14px; }
+  .quick-nav-btn{
+    flex:1; min-width:0;
+    background-color: color-mix(in srgb, var(--paper-2) 60%, transparent); border:1px solid var(--line); border-radius:12px;
+    padding:9px 8px; text-align:center; cursor:pointer;
+  }
+  .quick-nav-btn .qn-label{ font-size:11.5px; font-weight:800; color:var(--ink); display:block; }
+  .quick-nav-btn .qn-value{ font-size:10.5px; font-weight:700; color:var(--forest-deep); margin-top:3px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .health-tabs{ display:flex; gap:8px; margin-bottom:18px; }
+  .health-tab{
+    flex:1; text-align:center;
+    padding:11px 8px; border-radius:12px; border:1px solid var(--line);
+    background-color: color-mix(in srgb, var(--paper-2) 60%, transparent); color:var(--ink); font-size:12.5px; font-weight:700; cursor:pointer;
+  }
+  .health-tab.active{ background-color: color-mix(in srgb, var(--forest) 75%, transparent); color:#fff; border-color:var(--forest); }
+
+  .finance-columns{ display:flex; gap:0; align-items:stretch; margin-bottom:6px; }
+  .finance-col{ flex:1; min-width:0; padding:0 10px; }
+  .finance-col.expense-col{ border-left:1px solid var(--line); }
+  .finance-col .col-title{ font-size:13px; font-weight:800; text-align:center; padding:8px 0; border-radius:10px; margin-bottom:12px; }
+  .finance-col.expense-col .col-title{ color:var(--holiday); background:rgba(198,40,40,0.08); }
+  .finance-col.income-col .col-title{ color:var(--forest-deep); background:rgba(75,90,63,0.1); }
+  .finance-col .cal-add-form input, .finance-col .add-expense-row input{ font-size:12.5px; padding:9px 10px; }
+  .finance-col .add-expense-row{ flex-direction:column; }
+  .finance-col .add-expense-row input.amt{ width:100%; }
+  .finance-col .day-sum{ text-align:center; font-size:14px; border-radius:10px; padding:9px; margin-top:10px; }
+  .finance-col.expense-col .day-sum{ color:var(--holiday); background:rgba(198,40,40,0.08); }
+  .finance-col.income-col .day-sum{ color:var(--forest-deep); background:rgba(75,90,63,0.1); }
+
+  .finance-summary-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+  .finance-summary-card{ border-radius:12px; padding:12px 8px; text-align:center; border:1px solid var(--line); }
+  .finance-summary-card.expense{ background:rgba(198,40,40,0.08); }
+  .finance-summary-card.income{ background:rgba(75,90,63,0.1); }
+  .finance-summary-card .fsc-label{ font-size:10.5px; opacity:0.75; margin-bottom:4px; font-weight:700; }
+  .finance-summary-card .fsc-value{ font-size:15px; font-weight:800; }
+  .finance-summary-card.expense .fsc-value{ color:var(--holiday); }
+  .finance-summary-card.income .fsc-value{ color:var(--forest-deep); }
+  .finance-summary-title{ font-size:12px; font-weight:800; opacity:0.7; margin:16px 0 6px; text-align:center; }
+
+  .cal-add-form input{
+    width:100%; padding:11px 12px; border-radius:10px; border:1px solid var(--line);
+    background:var(--paper-2); font-family:'Vazirmatn',sans-serif; font-size:14px; color:var(--ink);
+    outline:none; margin-bottom:8px;
+  }
+  .cal-add-form input:focus{ border-color:var(--gold); }
+  .cal-preview{ font-size:12px; color:var(--forest-deep); font-weight:700; margin-bottom:8px; min-height:16px; }
+  .cal-meal-row{
+    display:flex; align-items:center; gap:8px; padding:9px 4px; border-bottom:1px solid var(--line);
+  }
+  .cal-meal-row:last-child{ border-bottom:none; }
+  .cal-meal-desc{ flex:1; font-size:13px; }
+  .cal-meal-desc .amt{ opacity:0.6; font-size:11px; }
+  .cal-meal-kcal{ font-size:13px; font-weight:700; color:var(--forest-deep); white-space:nowrap; }
+  .cal-meal-remove{ background:none; border:none; color:var(--red); font-size:14px; cursor:pointer; opacity:0.6; }
+  .subtab-back{
+    background:none; border:none; color:var(--forest-deep); font-weight:700; font-size:13px;
+    font-family:'Vazirmatn',sans-serif; cursor:pointer; padding:6px 2px; margin-bottom:12px; display:block;
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar">
-    <button class="icon-btn" id="backBtn">بازگشت ‹‹</button>
-    <div style="display:flex; gap:8px;">
+    <button class="icon-btn" id="backBtn">🏠 صفحه اصلی</button>
+    <div class="topbar-right">
+      <button class="theme-btn" id="themeBtn">🌙</button>
       <button class="pill-btn" id="todayBtn">امروز</button>
       <button class="save-btn-top" id="saveBtn">💾 ذخیره</button>
     </div>
@@ -239,10 +434,29 @@
     <span><i class="dotleg" style="background:var(--past-bg);border:1px solid var(--line)"></i>گذشته</span>
     <span><i class="dotleg" style="background:var(--today-bg)"></i>امروز</span>
     <span><i class="dotleg" style="background:var(--future-bg)"></i>در انتظار</span>
+    <span><i class="dotleg" style="background:var(--holiday)"></i>تعطیل</span>
   </div>
   <div id="content"></div>
+  <div class="tiny-footer">777&nbsp;&nbsp;&nbsp;369</div>
 </div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">
+  <span id="toastMsg"></span>
+  <button class="toast-close" id="toastClose">بستن</button>
+</div>
+<div class="modal-overlay" id="alarmModal">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <div class="modal-title">⏰ تنظیم الارم</div>
+      <button class="modal-close" id="alarmModalClose">✕</button>
+    </div>
+    <div id="alarmTaskList"></div>
+    <div class="alarm-time-row">
+      <label>ساعت الارم</label>
+      <input type="time" id="alarmTimeInput">
+    </div>
+    <button class="alarm-save-btn" id="alarmSaveBtn">ذخیره الارم</button>
+  </div>
+</div>
 
 <script>
 /* ---------- Jalali conversion (Birashk algorithm) ---------- */
@@ -291,7 +505,7 @@ function addDaysJalali(jy,jm,jd,delta){
 function weekdayShift(jy,jm,jd){
   const [gy,gm,gd] = jalaliToGregorian(jy,jm,jd);
   const dow = new Date(gy,gm-1,gd).getDay(); // 0=Sun..6=Sat
-  return (dow + 1) % 7; // 0=Sat
+  return (dow + 1) % 7; // 0=Sat ... 6=Fri
 }
 function dateStatus(jy,jm,jd){
   const [gy,gm,gd] = jalaliToGregorian(jy,jm,jd);
@@ -304,6 +518,95 @@ function dateStatus(jy,jm,jd){
 
 const jMonthNames = ["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
 const jWeekdayNames = ["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"];
+const gMonthNames = ["ژانویه","فوریه","مارس","آوریل","مه","ژوئن","ژوئیه","اوت","سپتامبر","اکتبر","نوامبر","دسامبر"];
+const hMonthNames = ["محرم","صفر","ربیع‌الاول","ربیع‌الثانی","جمادی‌الاول","جمادی‌الثانی","رجب","شعبان","رمضان","شوال","ذی‌القعده","ذی‌الحجه"];
+
+/* ---------- Hijri (lunar/Islamic) conversion — civil tabular calendar, approximate ---------- */
+function gregorianToJDN(gy,gm,gd){
+  const a = Math.floor((14-gm)/12);
+  const y = gy + 4800 - a;
+  const m = gm + 12*a - 3;
+  return gd + Math.floor((153*m+2)/5) + 365*y + Math.floor(y/4) - Math.floor(y/100) + Math.floor(y/400) - 32045;
+}
+function jdnToHijri(jdn){
+  const islamicEpoch = 1948440;
+  let l = jdn - islamicEpoch + 10632;
+  const n = Math.floor((l-1)/10631);
+  l = l - 10631*n + 354;
+  const j = (Math.floor((10985-l)/5316))*(Math.floor((50*l)/17719)) + (Math.floor(l/5670))*(Math.floor((43*l)/15238));
+  l = l - (Math.floor((30-j)/15))*(Math.floor((17719*j)/50)) - (Math.floor(j/16))*(Math.floor((15238*j)/43)) + 29;
+  const month = Math.floor((24*l)/709);
+  const day = l - Math.floor((709*month)/24);
+  const year = 30*n + j - 30;
+  return [year, month, day];
+}
+function getHijriDate(jy,jm,jd){
+  const [gy,gm,gd] = jalaliToGregorian(jy,jm,jd);
+  return jdnToHijri(gregorianToJDN(gy,gm,gd));
+}
+function formatGregorian(jy,jm,jd){
+  const [gy,gm,gd] = jalaliToGregorian(jy,jm,jd);
+  return `${gd} ${gMonthNames[gm-1]} ${gy}`;
+}
+function formatHijri(jy,jm,jd){
+  const [hy,hm,hd] = getHijriDate(jy,jm,jd);
+  return `${hd} ${hMonthNames[hm-1]} ${hy}`;
+}
+
+/* ---------- Official holidays ---------- */
+/* Fixed solar-Hijri holidays that fall on the same Jalali date every year */
+const FIXED_HOLIDAYS = [
+  {jm:1,jd:1,label:"نوروز"},
+  {jm:1,jd:2,label:"نوروز"},
+  {jm:1,jd:3,label:"نوروز"},
+  {jm:1,jd:4,label:"نوروز"},
+  {jm:1,jd:12,label:"روز جمهوری اسلامی"},
+  {jm:1,jd:13,label:"سیزده‌به‌در"},
+  {jm:11,jd:22,label:"پیروزی انقلاب اسلامی"},
+  {jm:12,jd:29,label:"ملی شدن صنعت نفت"},
+];
+/* Lunar (Hijri)-based holidays shift a bit each Jalali year, so these are listed per-year.
+   Currently filled in for 1405 based on the official calendar. Ask me to add more years. */
+const HOLIDAYS_BY_YEAR = {
+  1405: [
+    {jm:1,jd:25,label:"شهادت امام جعفر صادق (ع)"},
+    {jm:3,jd:6,label:"عید سعید قربان"},
+    {jm:3,jd:14,label:"رحلت امام خمینی (ره)"},
+    {jm:3,jd:15,label:"قیام ۱۵ خرداد / عید سعید غدیر خم"},
+    {jm:4,jd:3,label:"تاسوعای حسینی"},
+    {jm:4,jd:4,label:"عاشورای حسینی"},
+    {jm:5,jd:22,label:"شهادت امام رضا (ع)"},
+    {jm:5,jd:30,label:"شهادت امام حسن عسکری (ع)"},
+  ],
+};
+function getHolidayLabel(jy,jm,jd){
+  const yearList = HOLIDAYS_BY_YEAR[jy] || [];
+  const found = yearList.find(h=>h.jm===jm && h.jd===jd) || FIXED_HOLIDAYS.find(h=>h.jm===jm && h.jd===jd);
+  const labels = [];
+  if(found) labels.push(`ایران: ${found.label}`);
+  const dubai = getDubaiHolidayLabel(jy,jm,jd);
+  if(dubai) labels.push(`دبی: ${dubai}`);
+  return labels.length ? labels.join(' • ') : null;
+}
+/* Dubai/UAE public holidays: fixed Gregorian ones + Hijri-month/day ones (computed dynamically,
+   so accurate for any year; actual date can shift by a day depending on official moon sighting). */
+function getDubaiHolidayLabel(jy,jm,jd){
+  const [gy,gm,gd] = jalaliToGregorian(jy,jm,jd);
+  if(gm===1 && gd===1) return "روز سال نو میلادی";
+  if(gm===12 && gd===1) return "روز یادبود";
+  if(gm===12 && (gd===2 || gd===3)) return "روز ملی امارات";
+  const [,hm,hd] = getHijriDate(jy,jm,jd);
+  if(hm===1 && hd===1) return "سال نو هجری قمری";
+  if(hm===3 && hd===12) return "میلاد پیامبر (ص)";
+  if(hm===12 && hd===9) return "روز عرفه";
+  if(hm===12 && (hd===10 || hd===11 || hd===12)) return "عید سعید قربان";
+  if(hm===10 && (hd===1 || hd===2 || hd===3)) return "عید سعید فطر";
+  return null;
+}
+function isHoliday(jy,jm,jd){
+  if(weekdayShift(jy,jm,jd) === 6) return true; // Friday
+  return !!getHolidayLabel(jy,jm,jd);
+}
 
 /* ---------- Motivational quote of the day ---------- */
 const MOTIVATIONAL_QUOTES = [
@@ -415,7 +718,26 @@ let firedReminders = new Set();
 function dayCacheKey(jy,jm,jd){ return `${jy}-${jm}-${jd}`; }
 function storageKey(jy,jm,jd){ return `day:${jy}-${String(jm).padStart(2,'0')}-${String(jd).padStart(2,'0')}`; }
 
-function emptyDayData(){ return { done: [], expenses: [], reminders: {}, note: '' }; }
+const MUSCLE_GROUPS = ["سینه","سرشونه","زیر بغل","پا","جلو بازو","پشت بازو"];
+function emptyGym(){
+  const g = {};
+  MUSCLE_GROUPS.forEach(k=>{ g[k] = []; });
+  return g;
+}
+function emptyDayData(){ return { done: [], expenses: [], income: [], reminders: {}, note: '', healthNote: '', meals: [], gym: emptyGym() }; }
+function ensureGymShape(data){
+  const old = data.gym;
+  if(!old || Array.isArray(old.exercises) || typeof old !== 'object'){
+    const migrated = emptyGym();
+    if(old && Array.isArray(old.exercises) && old.exercises.length){
+      migrated[MUSCLE_GROUPS[0]] = old.exercises;
+    }
+    data.gym = migrated;
+  } else {
+    MUSCLE_GROUPS.forEach(k=>{ if(!Array.isArray(data.gym[k])) data.gym[k] = []; });
+  }
+  return data;
+}
 
 function fetchDay(jy,jm,jd){
   const ck = dayCacheKey(jy,jm,jd);
@@ -423,6 +745,7 @@ function fetchDay(jy,jm,jd){
   let data = emptyDayData();
   const raw = lsGet(storageKey(jy,jm,jd));
   if(raw){ try{ data = Object.assign(emptyDayData(), JSON.parse(raw)); }catch(e){} }
+  ensureGymShape(data);
   dayDataCache[ck] = data;
   return data;
 }
@@ -440,7 +763,6 @@ function loadTasks(){
     taskList = [...DEFAULT_TASKS];
     lsSet('tasks', JSON.stringify(taskList));
   }
-  // one-time migration: add any new default tasks that older lists don't have yet
   if(!lsGet('tasks_migrated_v2')){
     let changed = false;
     DEFAULT_TASKS.forEach(t=>{
@@ -458,12 +780,32 @@ function fmtCompact(n){
   catch(e){ return fmtAmount(n); }
 }
 
+/* ---------- Theme (light/dark) ---------- */
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('themeBtn').textContent = theme === 'dark' ? '☀️' : '🌙';
+}
+function initTheme(){
+  const saved = lsGet('theme') || 'light';
+  applyTheme(saved);
+}
+document.getElementById('themeBtn').addEventListener('click', ()=>{
+  const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  lsSet('theme', next);
+});
+
 function showToast(msg){
   const t = document.getElementById('toast');
-  t.textContent = msg;
+  document.getElementById('toastMsg').textContent = msg;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 4000);
+  clearTimeout(t.__hideTimer);
+  t.__hideTimer = setTimeout(()=>t.classList.remove('show'), 8000);
 }
+document.getElementById('toastClose').addEventListener('click', ()=>{
+  document.getElementById('toast').classList.remove('show');
+});
 
 /* ---------- Reminder checker ---------- */
 async function checkReminders(){
@@ -478,6 +820,7 @@ async function checkReminders(){
       if(!firedReminders.has(fireKey)){
         firedReminders.add(fireKey);
         showToast(`⏰ یادآوری: ${task}`);
+        if("vibrate" in navigator){ try{ navigator.vibrate([300,100,300,100,300]); }catch(e){} }
         if("Notification" in window && Notification.permission === 'granted'){
           try{ new Notification('یادآوری پلنر', { body: task }); }catch(e){}
         }
@@ -487,6 +830,241 @@ async function checkReminders(){
 }
 setInterval(checkReminders, 20000);
 
+/* ---------- Calorie tracker ---------- */
+/* kcal per 100 grams — a broad reference list: Iranian dishes, breads, international
+   food, drinks, fruits, vegetables, nuts, dairy, sweets. Approximate standard values. */
+const FOOD_DB = {
+  // نان و غلات
+  "برنج پخته": 130, "برنج": 130, "برنج قهوه‌ای": 111, "نان": 270, "نان سنگک": 270,
+  "نان لواش": 300, "نان بربری": 280, "نان باگت": 270, "نان تست": 265, "نان تست ساده": 265,
+  "نان تست سبوس‌دار": 247, "نان تست پروتئین": 240, "نان پروتئین": 240, "نان سبوس‌دار": 247,
+  "نان جو": 250, "نان جو دوسر": 246, "نان گندم کامل": 247, "نان فانتزی": 290, "نان همبرگر": 280,
+  "نان پیتا": 275, "نان تورتیلا": 218, "نان شیرمال": 310, "نان قندی": 330,
+  "جو دوسر": 389, "جو دوسر پخته": 71, "کورن فلکس": 357, "کینوا پخته": 120, "کینوا خام": 368,
+  "ماکارونی": 158, "ماکارونی پخته": 158, "اسپاگتی": 158, "لازانیا": 135, "پن پاستا": 158,
+  "بلغور": 112, "گندم": 340, "جو": 354, "آرد گندم": 364, "آرد سفید": 364, "آرد سبوس‌دار": 340,
+  "نشاسته": 381,
+
+  // پروتئین‌ها و گوشت
+  "مرغ": 165, "سینه مرغ": 165, "سینه مرغ گریل": 165, "سینه مرغ کبابی": 172, "ران مرغ": 210,
+  "مرغ سوخاری": 246, "بال مرغ": 203, "مرغ بدون پوست": 150, "جوجه": 165,
+  "گوشت گوسفند": 250, "گوشت گاو": 250, "گوشت چرخ‌کرده": 254, "گوشت چرخ‌کرده کم‌چرب": 200,
+  "استیک": 271, "استیک گوسفندی": 294, "جگر": 175, "جگر مرغ": 167, "دل و قلوه": 150,
+  "تخم‌مرغ": 155, "تخم‌مرغ آب‌پز": 155, "سفیده تخم‌مرغ": 52, "زرده تخم‌مرغ": 322,
+  "املت": 195, "نیمرو": 196, "بیکن": 541, "سوسیس": 300, "سوسیس مرغ": 220, "کالباس": 250, "کالباس مرغ": 180,
+  "ماهی": 150, "ماهی قزل‌آلا": 208, "ماهی سالمون": 208, "ماهی سفید": 120, "ماهی کپور": 127,
+  "تن ماهی": 130, "تن ماهی کنسروی": 116, "میگو": 99, "خرچنگ": 97, "صدف": 86, "کالاماری": 92,
+
+  // لبنیات
+  "پنیر": 260, "پنیر فتا": 264, "پنیر پیتزا": 300, "پنیر موزارلا": 280, "پنیر چدار": 403,
+  "پنیر خامه‌ای": 342, "پنیر کاتیج": 98, "پنیر پروبیوتیک": 250, "پنیر لبنه": 290,
+  "ماست": 60, "ماست یونانی": 97, "ماست چکیده": 130, "ماست پرچرب": 88, "ماست کم‌چرب": 45,
+  "کفیر": 41, "شیر": 60, "شیر کامل": 61, "شیر کم‌چرب": 42, "شیر بدون چربی": 34,
+  "شیر بادام": 17, "شیر سویا": 33, "خامه": 340, "خامه صبحانه": 292, "کره": 717, "کره بادام‌زمینی": 588,
+
+  // حبوبات
+  "عدس": 116, "عدس پخته": 116, "لوبیا": 127, "لوبیا چیتی": 127, "لوبیا قرمز": 127,
+  "لوبیا سفید": 139, "نخود": 164, "نخود پخته": 164, "ماش": 105, "باقلا": 88, "سویا": 173,
+
+  // سبزیجات
+  "سیب‌زمینی": 87, "سیب‌زمینی پخته": 87, "سیب‌زمینی سرخ‌کرده": 312, "پوره سیب‌زمینی": 105,
+  "خیار": 15, "گوجه‌فرنگی": 18, "رب گوجه‌فرنگی": 82, "خیارشور": 11, "کاهو": 15,
+  "هویج": 41, "کلم": 25, "کلم بروکلی": 34, "گل‌کلم": 25, "اسفناج": 23, "بادمجان": 25,
+  "کدو": 17, "کدو سبز": 17, "کدو حلوایی": 26, "فلفل دلمه‌ای": 20, "فلفل تند": 40,
+  "پیاز": 40, "سیر": 149, "ذرت": 96, "ذرت مکزیکی": 86, "قارچ": 22, "کرفس": 16,
+  "چغندر": 43, "شلغم": 28, "تربچه": 16, "کنگر": 47, "بامیه": 33, "لوبیا سبز": 31,
+  "نخود سبز": 81, "کلم بروکسل": 43, "زیتون": 115, "زیتون پرورده": 145,
+
+  // میوه‌ها
+  "سیب": 52, "موز": 89, "پرتقال": 47, "نارنگی": 53, "انگور": 69, "هندوانه": 30,
+  "طالبی": 34, "خربزه": 34, "توت‌فرنگی": 33, "گیلاس": 63, "آلبالو": 50, "هلو": 39,
+  "گلابی": 57, "کیوی": 61, "آناناس": 50, "انبه": 60, "انار": 83, "انجیر": 74,
+  "خرمالو": 70, "آلو": 46, "زردآلو": 48, "لیمو": 29, "لیمو شیرین": 30, "گریپ‌فروت": 42,
+  "توت": 43, "زغال‌اخته": 57, "شاتوت": 43, "نارگیل تازه": 354, "آووکادو": 160,
+  "به": 57, "ازگیل": 47, "کیوی طلایی": 63, "لیچی": 66, "پاپایا": 43, "کرنبری": 46,
+
+  // آجیل و خشکبار
+  "بادام": 579, "بادام خام": 579, "بادام برشته": 598, "گردو": 654, "پسته": 560,
+  "فندق": 628, "بادام‌زمینی": 567, "بادام هندی": 553, "کشمش": 299, "خرما": 282,
+  "انجیر خشک": 249, "زردآلو خشک": 241, "توت خشک": 340, "آلو خشک": 240,
+  "تخمه آفتابگردان": 584, "تخمه کدو": 559, "نارگیل خشک": 660, "آجیل مخلوط": 607,
+  "برگه زردآلو": 241, "کنجد": 573,
+
+  // شیرینی و دسر
+  "شکر": 387, "عسل": 304, "شکلات": 546, "شکلات تلخ": 546, "شکلات شیری": 535,
+  "شکلات سفید": 539, "کیک": 350, "کیک شکلاتی": 370, "کیک اسفنجی": 297, "بیسکویت": 460,
+  "کلوچه": 400, "بستنی": 207, "بستنی وانیلی": 207, "بستنی شکلاتی": 216, "پودینگ": 130,
+  "حلوا": 480, "حلوا ارده": 510, "باقلوا": 430, "گز": 380, "سوهان": 450, "زولبیا بامیه": 430,
+  "مربا": 250, "دونات": 452, "وافل": 291, "مافین": 377, "براونی": 466, "چیزکیک": 321,
+  "ژله": 62, "آب‌نبات": 390, "پاستیل": 343, "آدامس": 220,
+
+  // روغن و چاشنی
+  "روغن": 884, "روغن زیتون": 884, "روغن نباتی": 884, "روغن کنجد": 884,
+  "سس مایونز": 680, "سس کچاپ": 100, "سس گوجه": 82, "سس سویا": 53, "سرکه": 18,
+
+  // نوشیدنی‌ها
+  "آب": 0, "آب معدنی": 0, "چای": 1, "چای شیرین": 25, "قهوه": 2, "قهوه با شیر": 40,
+  "نسکافه": 45, "اسپرسو": 2, "کاپوچینو": 60, "لاته": 55, "نوشابه": 42, "نوشابه رژیمی": 0,
+  "آبمیوه": 45, "آب پرتقال": 45, "آب سیب": 46, "آب انگور": 60, "دوغ": 35, "شیرکاکائو": 83,
+  "اسموتی": 60, "شربت آلبالو": 90, "شربت سکنجبین": 100, "شیر موز": 90, "نوشیدنی انرژی‌زا": 45,
+  "آبجو بدون الکل": 27,
+
+  // غذاهای ایرانی
+  "قورمه‌سبزی": 120, "قیمه": 130, "زرشک‌پلو": 200, "زرشک پلو با مرغ": 210, "چلوکباب": 230,
+  "کباب کوبیده": 215, "جوجه‌کباب": 165, "جوجه کباب": 165, "کباب برگ": 220, "کباب بختیاری": 210,
+  "فسنجان": 190, "کشک بادمجان": 145, "میرزاقاسمی": 120, "دلمه": 140, "دلمه برگ مو": 130,
+  "آش رشته": 90, "حلیم": 160, "کوکو سبزی": 180, "باقالی‌پلو": 170, "لوبیا پلو": 180,
+  "عدس پلو": 175, "ته‌چین": 220, "کتلت": 250, "شامی": 230, "سبزی پلو با ماهی": 190,
+  "آبگوشت": 140, "دیزی": 140, "کله‌پاچه": 250, "جوجه لاری": 160, "ماست و خیار": 55,
+  "کشک": 100, "آش دوغ": 60, "آش جو": 70, "کوفته": 210, "کوفته تبریزی": 220,
+  "خورش قیمه": 130, "خورش کرفس": 110, "خورش بادمجان": 115, "خوراک لوبیا": 150,
+  "کوکو سیب‌زمینی": 200, "کوکو بادمجان": 170, "عدسی": 116, "آش ماست": 65, "پلو مخصوص": 175,
+  "زرشک": 316, "سبزی خوردن": 20, "ترشی": 30, "شور": 20,
+
+  // فست‌فود و غذاهای بین‌المللی
+  "پیتزا": 266, "پیتزا پپرونی": 298, "پیتزا مارگاریتا": 250, "همبرگر": 250, "چیزبرگر": 280,
+  "ساندویچ": 250, "ساندویچ مرغ": 230, "ساندویچ کالباس": 260, "هات‌داگ": 290, "سوخاری": 260,
+  "ناگت مرغ": 296, "فلافل": 333, "شاورما": 220, "شاورما مرغ": 210, "بریتو": 206, "تاکو": 226,
+  "بوریتو مرغ": 200, "سوشی": 130, "رول کالیفرنیا": 145, "نودل": 138, "سوپ نودل": 60,
+  "کاری": 150, "پاستا آلفردو": 190, "پاستا بولونیز": 160, "پاستا با سس پستو": 220,
+  "سالاد سزار": 190, "سالاد یونانی": 130, "سالاد الویه": 250, "سالاد فصل": 25, "سالاد کلم": 90,
+  "سوپ جو": 45, "سوپ مرغ": 55, "سوپ عدس": 60, "سوپ گوجه": 40, "سوپ قارچ": 55,
+  "بورگر گیاهی": 180, "پنکیک": 227, "کروسان": 406, "بروشت": 250, "کباب ترکی": 250,
+  "دونر کباب": 220, "همبرگر گوشت": 254, "چیپس": 536, "پفک": 540, "پاپ‌کورن": 387,
+};
+
+function normalizeFa(s){
+  return (s||'')
+    .replace(/\u200c/g, ' ')
+    .replace(/[یي]/g, 'ی')
+    .replace(/[کك]/g, 'ک')
+    .replace(/[ۀه]$/g, 'ه')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+/* common colloquial spellings mapped to the standard form used in FOOD_DB */
+const FOOD_ALIASES = {
+  "نون": "نان", "نون سنگک": "نان سنگک", "نون لواش": "نان لواش", "نون تست": "نان تست",
+  "پرتغال": "پرتقال", "بادمجون": "بادمجان", "هندونه": "هندوانه", "خونه": "خونه",
+  "گوجه": "گوجه‌فرنگی", "خیارچنبر": "خیار", "مرقد": "مرغ", "مرق": "مرغ",
+  "چلو کباب": "چلوکباب", "قورمه سبزی": "قورمه‌سبزی", "زرشک پلو": "زرشک‌پلو",
+  "ته چین": "ته‌چین", "باقالی پلو": "باقالی‌پلو",
+};
+function levenshtein(a,b){
+  const m = a.length, n = b.length;
+  if(!m) return n; if(!n) return m;
+  const dp = Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++) dp[0][j]=j;
+  for(let i=1;i<=m;i++){
+    for(let j=1;j<=n;j++){
+      dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);
+    }
+  }
+  return dp[m][n];
+}
+function findFoodCalories(name){
+  let n = normalizeFa(name);
+  if(!n) return null;
+  if(FOOD_ALIASES[n]) n = normalizeFa(FOOD_ALIASES[n]);
+
+  // 1) exact match
+  for(const key in FOOD_DB){
+    if(normalizeFa(key) === n) return FOOD_DB[key];
+  }
+  // 2) substring match (either direction)
+  for(const key in FOOD_DB){
+    const nk = normalizeFa(key);
+    if(nk.includes(n) || n.includes(nk)) return FOOD_DB[key];
+  }
+  // 3) word-overlap match — good for compound phrases like "نان تست پروتئین"
+  const words = n.split(' ').filter(Boolean);
+  let bestKey = null, bestScore = 0;
+  for(const key in FOOD_DB){
+    const kw = normalizeFa(key).split(' ').filter(Boolean);
+    const overlap = words.filter(w => kw.includes(w)).length;
+    if(overlap > bestScore){ bestScore = overlap; bestKey = key; }
+  }
+  if(bestKey && bestScore > 0) return FOOD_DB[bestKey];
+  // 4) fuzzy match for small typos
+  let closestKey = null, closestDist = Infinity;
+  for(const key in FOOD_DB){
+    const nk = normalizeFa(key);
+    const d = levenshtein(n, nk);
+    if(d < closestDist){ closestDist = d; closestKey = key; }
+  }
+  if(closestKey && closestDist <= Math.max(2, Math.floor(closestKey.length*0.3))) return FOOD_DB[closestKey];
+  return null;
+}
+
+/* ---------- Flexible quantity parsing (grams, glass, bowl, piece, spoon...) ---------- */
+const UNIT_TO_GRAMS = {
+  "گرم": 1, "گرمی": 1, "گ": 1,
+  "کیلو": 1000, "کیلوگرم": 1000,
+  "لیوان": 200, "پیمانه": 200, "فنجان": 200,
+  "کاسه": 280, "بشقاب": 300,
+  "عدد": 50, "دانه": 50, "تکه": 35, "برش": 35, "قاچ": 35,
+  "قاشق غذاخوری": 15, "قاشق": 15, "ق.غ": 15,
+  "قاشق چایخوری": 5, "قاشق چای‌خوری": 5, "ق.چ": 5,
+  "کفگیر": 100,
+};
+function parseAmount(text){
+  const raw = (text||'').trim();
+  if(!raw) return { grams: 0, label: '' };
+  const faDigits = '۰۱۲۳۴۵۶۷۸۹';
+  const normalized = raw.replace(/[۰-۹]/g, d => faDigits.indexOf(d));
+  const match = normalized.match(/([\d.]+)\s*(.*)/);
+  if(!match) return { grams: 0, label: raw };
+  const num = parseFloat(match[1]) || 0;
+  const unitText = normalizeFa(match[2] || 'گرم');
+  let gramsPerUnit = 1;
+  for(const u in UNIT_TO_GRAMS){
+    if(unitText.includes(normalizeFa(u))){ gramsPerUnit = UNIT_TO_GRAMS[u]; break; }
+  }
+  return { grams: num * gramsPerUnit, label: raw };
+}
+
+function dayCalorieTotal(data){
+  return (data.meals||[]).reduce((s,m)=>s+Number(m.kcal||0),0);
+}
+/* ---------- Alarm modal ---------- */
+function openAlarmModal(jy,jm,jd){
+  window.__alarmCtx = {jy,jm,jd};
+  let html = '';
+  if(!taskList.length){
+    html = '<div class="empty-note">هنوز کاری اضافه نکردی</div>';
+  } else {
+    taskList.forEach(t=>{
+      const id = 'alarmChk_' + encodeURIComponent(t);
+      html += `<div class="alarm-task-row"><input type="checkbox" id="${id}" value="${encodeURIComponent(t)}"><label for="${id}">${t}</label></div>`;
+    });
+  }
+  document.getElementById('alarmTaskList').innerHTML = html;
+  document.getElementById('alarmTimeInput').value = '';
+  document.getElementById('alarmModal').classList.add('open');
+}
+function closeAlarmModal(){
+  document.getElementById('alarmModal').classList.remove('open');
+}
+document.getElementById('alarmModalClose').addEventListener('click', closeAlarmModal);
+document.getElementById('alarmModal').addEventListener('click', (e)=>{
+  if(e.target.id === 'alarmModal') closeAlarmModal();
+});
+document.getElementById('alarmSaveBtn').addEventListener('click', async ()=>{
+  const ctx = window.__alarmCtx;
+  if(!ctx) return;
+  const time = document.getElementById('alarmTimeInput').value;
+  if(!time){ showToast('یه ساعت برای الارم انتخاب کن'); return; }
+  const checked = Array.from(document.querySelectorAll('#alarmTaskList input[type=checkbox]:checked'));
+  if(!checked.length){ showToast('حداقل یه کار رو انتخاب کن'); return; }
+  const d = await fetchDay(ctx.jy, ctx.jm, ctx.jd);
+  checked.forEach(cb=>{ d.reminders[decodeURIComponent(cb.value)] = time; });
+  await saveDay(ctx.jy, ctx.jm, ctx.jd, d);
+  closeAlarmModal();
+  showToast('⏰ الارم ذخیره شد');
+  if(view === 'day') renderDayView();
+});
+
 /* ---------- Navigation ---------- */
 function setView(v, a){
   view = v;
@@ -495,20 +1073,20 @@ function setView(v, a){
 }
 
 document.getElementById('backBtn').addEventListener('click', ()=>{
-  if(view === 'day') setView('week', anchor);
-  else if(view === 'week') setView('month', anchor);
+  setView('month', anchor);
 });
 document.getElementById('todayBtn').addEventListener('click', ()=>{
   setView('day', { jy: tJy, jm: tJm, jd: tJd });
 });
+const DAY_SCOPED_VIEWS = ['day','health','finance'];
 document.getElementById('nextBtn').addEventListener('click', ()=>{
-  if(view === 'day'){ anchor = Object.assign({}, {jy:anchor.jy,jm:anchor.jm,jd:anchor.jd}); const n = addDaysJalali(anchor.jy,anchor.jm,anchor.jd,1); anchor={jy:n[0],jm:n[1],jd:n[2]}; }
+  if(DAY_SCOPED_VIEWS.includes(view)){ const n = addDaysJalali(anchor.jy,anchor.jm,anchor.jd,1); anchor={jy:n[0],jm:n[1],jd:n[2]}; }
   else if(view === 'week'){ const n = addDaysJalali(anchor.jy,anchor.jm,anchor.jd,7); anchor={jy:n[0],jm:n[1],jd:n[2]}; }
   else{ anchor.jm++; if(anchor.jm>12){anchor.jm=1; anchor.jy++;} anchor.jd = Math.min(anchor.jd, jDaysInMonth(anchor.jy,anchor.jm)); }
   renderAll();
 });
 document.getElementById('prevBtn').addEventListener('click', ()=>{
-  if(view === 'day'){ const n = addDaysJalali(anchor.jy,anchor.jm,anchor.jd,-1); anchor={jy:n[0],jm:n[1],jd:n[2]}; }
+  if(DAY_SCOPED_VIEWS.includes(view)){ const n = addDaysJalali(anchor.jy,anchor.jm,anchor.jd,-1); anchor={jy:n[0],jm:n[1],jd:n[2]}; }
   else if(view === 'week'){ const n = addDaysJalali(anchor.jy,anchor.jm,anchor.jd,-7); anchor={jy:n[0],jm:n[1],jd:n[2]}; }
   else{ anchor.jm--; if(anchor.jm<1){anchor.jm=12; anchor.jy--;} anchor.jd = Math.min(anchor.jd, jDaysInMonth(anchor.jy,anchor.jm)); }
   renderAll();
@@ -521,6 +1099,8 @@ async function renderAll(){
   content.innerHTML = '<div class="loading">در حال بارگذاری...</div>';
   if(view === 'day') await renderDayView();
   else if(view === 'week') await renderWeekView();
+  else if(view === 'health') await renderHealthView();
+  else if(view === 'finance') await renderFinanceView();
   else await renderMonthView();
 }
 
@@ -528,9 +1108,9 @@ async function renderAll(){
 async function renderDayView(){
   const {jy,jm,jd} = anchor;
   const status = dateStatus(jy,jm,jd);
-  const [gy,gm,gd] = jalaliToGregorian(jy,jm,jd);
   const shift = weekdayShift(jy,jm,jd);
   const wd = jWeekdayNames[shift];
+  const holidayLabel = getHolidayLabel(jy,jm,jd) || (shift===6 ? 'جمعه' : null);
 
   document.getElementById('titleMain').textContent = `${wd} ${jd} ${jMonthNames[jm-1]}`;
   document.getElementById('titleSub').textContent = `${jy}`;
@@ -538,28 +1118,42 @@ async function renderDayView(){
   const data = await fetchDay(jy,jm,jd);
 
   const statusLabel = status==='past' ? 'این روز گذشته' : status==='today' ? 'امروز' : 'در انتظار این روز';
-  let html = `<div class="quote-banner">✨ ${getDayQuote(jy,jm,jd)}</div>`;
-  html += `<div class="day-status-banner status-${status}">${statusLabel}</div>`;
+  let html = `<div class="day-header-card status-${status}">
+    <div class="dhc-status">${statusLabel}</div>
+    <div class="dhc-dates">میلادی: ${formatGregorian(jy,jm,jd)} &nbsp;•&nbsp; قمری: ${formatHijri(jy,jm,jd)}</div>
+  </div>`;
+  if(holidayLabel) html += `<div class="holiday-banner">🔴 تعطیل — ${holidayLabel}</div>`;
+  html += `<div class="quote-banner">✨ ${getDayQuote(jy,jm,jd)}</div>`;
 
-  // Note
-  html += `<div class="section"><div class="section-title">یادداشت</div>
-    <textarea class="note-area" id="noteArea" placeholder="هر چیزی که می‌خوای برای این روز یادت بمونه...">${(data.note||'').replace(/</g,'&lt;')}</textarea>
+  const calTotal = dayCalorieTotal(data);
+  const expSum = data.expenses.reduce((s,e)=>s+Number(e.amount||0),0);
+  const incSum = (data.income||[]).reduce((s,e)=>s+Number(e.amount||0),0);
+
+  html += `<div class="quick-nav-row">
+    <div class="quick-nav-btn" id="openHealthTab">
+      <span class="qn-label">🏋️ ورزش و سلامتی</span>
+      <span class="qn-value">🔥 ${fmtAmount(calTotal)} کالری</span>
+    </div>
+    <div class="quick-nav-btn" id="openFinanceTab">
+      <span class="qn-label">💰 هزینه‌ها و درآمد</span>
+      <span class="qn-value">هزینه ${fmtCompact(expSum)} · درآمد ${fmtCompact(incSum)}</span>
+    </div>
   </div>`;
 
   // Tasks
-  html += `<div class="section"><div class="section-title">کارهای روزانه</div><div id="taskListBox">`;
+  html += `<div class="section"><div class="section-title">کارهای روزانه</div><div class="task-list" id="taskListBox">`;
   if(!taskList.length){
     html += `<div class="empty-note">هنوز کاری اضافه نکردی</div>`;
   } else {
     taskList.forEach(task=>{
       const checked = data.done.includes(task);
-      const reminder = data.reminders[task] || '';
+      const hasReminder = !!data.reminders[task];
       html += `
-        <div class="task-row">
+        <div class="task-row ${checked?'checked':''}">
           <div class="task-check ${checked?'checked':''}" data-task="${encodeURIComponent(task)}" data-act="toggle">${checked?'✓':''}</div>
           <div class="task-label" data-task="${encodeURIComponent(task)}" data-act="toggle">${task}</div>
-          <input type="time" class="task-reminder" data-task="${encodeURIComponent(task)}" value="${reminder}">
-          <button class="task-remove" data-task="${encodeURIComponent(task)}" data-act="remove">✕</button>
+          ${hasReminder ? `<span class="clock-badge">⏰${data.reminders[task]}</span>` : ''}
+          <span class="chip-remove" data-task="${encodeURIComponent(task)}" data-act="remove">✕</span>
         </div>`;
     });
   }
@@ -568,32 +1162,14 @@ async function renderDayView(){
       <input type="text" id="newTaskInput" placeholder="کار جدید، مثلاً: آموزش زبان">
       <button class="add-btn" id="addTaskBtn">+</button>
     </div>
+    <button class="alarm-btn" id="openAlarmBtn">⏰ تنظیم الارم</button>
     <button class="notif-btn" id="notifBtn">🔔 فعال‌سازی اعلان یادآور</button>
-    <div class="reminder-note">یادآورها وقتی کار می‌کنند که این صفحه در مرورگر باز باشد؛ برای یادآوری مطمئن حتی وقتی صفحه بسته است، کافیه همینجا از من بخوای در اپ Reminders گوشی‌ات هم ثبتش کنم.</div>
+    <div class="reminder-note">یادآورها وقتی کار می‌کنند که این صفحه در مرورگر باز باشد. اپل اجازه نمی‌ده صفحات وب، گوشی رو ویبره کنن یا زنگ بزنن وقتی سایلنته یا خاموشه — این محدودیت خود آیفونه. اگه یادآوری مطمئن (با ویبره واقعی و زنگ حتی در حالت سایلنت) می‌خوای، بهم بگو کدوم کار و چه ساعتی، تا برات توی اپ Reminders خودِ گوشیت ثبتش کنم.</div>
   </div>`;
 
-  // Expenses
-  const sum = data.expenses.reduce((s,e)=>s+Number(e.amount||0),0);
-  html += `<div class="section"><div class="section-title">هزینه‌های این روز</div><div id="expenseListBox">`;
-  if(!data.expenses.length){
-    html += `<div class="empty-note">هنوز هزینه‌ای ثبت نشده</div>`;
-  } else {
-    data.expenses.forEach(e=>{
-      html += `
-        <div class="expense-row">
-          <div class="expense-desc">${e.desc}</div>
-          <div class="expense-amt">${fmtAmount(e.amount)} تومان</div>
-          <button class="expense-remove" data-id="${e.id}">✕</button>
-        </div>`;
-    });
-  }
-  html += `</div>
-    <div class="add-expense-row">
-      <input type="text" class="desc" id="newExpDesc" placeholder="بابت چی؟">
-      <input type="number" class="amt" id="newExpAmt" placeholder="مبلغ (تومان)" step="0.01" inputmode="decimal">
-      <button class="add-btn" id="addExpBtn">+</button>
-    </div>
-    <div class="day-sum">جمع امروز: ${fmtAmount(sum)} تومان</div>
+  // Note
+  html += `<div class="section"><div class="section-title">یادداشت</div>
+    <textarea class="note-area" id="noteArea" placeholder="هر چیزی که می‌خوای برای این روز یادت بمونه...">${(data.note||'').replace(/</g,'&lt;')}</textarea>
   </div>`;
 
   document.getElementById('content').innerHTML = html;
@@ -603,17 +1179,13 @@ async function renderDayView(){
     el.addEventListener('click', ()=> toggleTask(decodeURIComponent(el.dataset.task)));
   });
   document.querySelectorAll('[data-act="remove"]').forEach(el=>{
-    el.addEventListener('click', ()=> removeTask(decodeURIComponent(el.dataset.task)));
-  });
-  document.querySelectorAll('.task-reminder').forEach(el=>{
-    el.addEventListener('change', ()=> setReminder(decodeURIComponent(el.dataset.task), el.value));
+    el.addEventListener('click', (e)=>{ e.stopPropagation(); removeTask(decodeURIComponent(el.dataset.task)); });
   });
   document.getElementById('addTaskBtn').addEventListener('click', addNewTask);
   document.getElementById('newTaskInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addNewTask(); });
-  document.getElementById('addExpBtn').addEventListener('click', addExpense);
-  document.querySelectorAll('.expense-remove').forEach(el=>{
-    el.addEventListener('click', ()=> removeExpense(el.dataset.id));
-  });
+  document.getElementById('openAlarmBtn').addEventListener('click', ()=> openAlarmModal(jy,jm,jd));
+  document.getElementById('openHealthTab').addEventListener('click', ()=> setView('health', {jy,jm,jd}));
+  document.getElementById('openFinanceTab').addEventListener('click', ()=> setView('finance', {jy,jm,jd}));
   const noteArea = document.getElementById('noteArea');
   let noteTimer = null;
   noteArea.addEventListener('input', ()=>{
@@ -644,11 +1216,6 @@ async function renderDayView(){
     await saveTasks();
     renderDayView();
   }
-  async function setReminder(task,time){
-    const d = await fetchDay(jy,jm,jd);
-    if(time) d.reminders[task] = time; else delete d.reminders[task];
-    await saveDay(jy,jm,jd,d);
-  }
   async function addNewTask(){
     const input = document.getElementById('newTaskInput');
     const val = input.value.trim();
@@ -657,6 +1224,341 @@ async function renderDayView(){
     await saveTasks();
     renderDayView();
   }
+}
+
+/* ---------- CALORIE TAB ---------- */
+/* ---------- HEALTH TAB (calorie + gym muscle groups) ---------- */
+let healthSubTab = 'کالری';
+async function renderHealthView(){
+  const {jy,jm,jd} = anchor;
+  const wd = jWeekdayNames[weekdayShift(jy,jm,jd)];
+  document.getElementById('titleMain').textContent = `${wd} ${jd} ${jMonthNames[jm-1]}`;
+  document.getElementById('titleSub').textContent = `${jy}`;
+
+  const data = await fetchDay(jy,jm,jd);
+
+  let html = `<button class="subtab-back" id="backToDayBtn">→ بازگشت به روز</button>`;
+  html += `<div class="section-title" style="font-size:18px;margin-bottom:10px;">🏋️ ورزش و سلامتی</div>`;
+
+  html += `<div class="health-tabs" id="healthTabs">
+    <div class="health-tab ${healthSubTab==='کالری'?'active':''}" data-tab="کالری">🍽 کالری روزانه</div>
+    <div class="health-tab ${healthSubTab==='ست‌ها'?'active':''}" data-tab="ست‌ها">🏋️ ست‌های روزانه</div>
+  </div>`;
+
+  html += `<div id="healthContent"></div>`;
+
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('backToDayBtn').addEventListener('click', ()=> setView('day', {jy,jm,jd}));
+  document.querySelectorAll('.health-tab').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      healthSubTab = el.dataset.tab;
+      renderHealthView();
+    });
+  });
+
+  if(healthSubTab === 'کالری'){
+    await renderCalorieContent(jy,jm,jd);
+  } else {
+    await renderDailySetsContent(jy,jm,jd);
+  }
+}
+
+async function renderCalorieContent(jy,jm,jd){
+  const data = await fetchDay(jy,jm,jd);
+  const total = dayCalorieTotal(data);
+  const monthTotal = await monthCalorieTotal(jy,jm);
+
+  let html = `<div class="day-sum" style="text-align:center;font-size:18px;margin-bottom:16px;">جمع امروز: ${fmtAmount(total)} کالری</div>`;
+  html += `<div class="section"><div class="section-title">یادداشت سلامتی</div>
+    <textarea class="note-area" id="healthNoteArea" placeholder="مثلاً: امروز حس گشنگی زیاد داشتم، رژیم رو رعایت کردم و غیره..." style="min-height:70px;">${(data.healthNote||'').replace(/</g,'&lt;')}</textarea>
+  </div>`;
+  html += `<div class="cal-add-form">
+    <input type="text" id="calFoodInput" list="foodDataList" placeholder="اسم غذا، مثلاً: نان تست پروتئین">
+    <input type="text" id="calAmountInput" placeholder="مقدار — مثلاً: ۲۰۰ گرم، ۱ لیوان، ۲ عدد، ۱ کاسه">
+    <input type="number" id="calManualInput" placeholder="کالری این وعده (خودت وارد کن یا بذار خودکار حساب کنه)">
+    <div class="cal-preview" id="calPreview"></div>
+    <button class="alarm-save-btn" id="calAddBtn">افزودن</button>
+  </div>`;
+  html += `<div id="calMealList"></div>`;
+  html += `<div class="day-sum">جمع کالری این ماه: ${fmtAmount(monthTotal)} کالری</div>`;
+
+  document.getElementById('healthContent').innerHTML = html;
+
+  const healthNoteArea = document.getElementById('healthNoteArea');
+  let healthNoteTimer = null;
+  healthNoteArea.addEventListener('input', ()=>{
+    clearTimeout(healthNoteTimer);
+    healthNoteTimer = setTimeout(async ()=>{
+      const d = await fetchDay(jy,jm,jd);
+      d.healthNote = healthNoteArea.value;
+      await saveDay(jy,jm,jd,d);
+    }, 700);
+  });
+
+  function renderMealList(){
+    const d = fetchDay(jy,jm,jd);
+    const meals = d.meals || [];
+    let mhtml = '';
+    if(!meals.length){
+      mhtml = '<div class="empty-note">هنوز چیزی برای امروز ثبت نشده</div>';
+    } else {
+      meals.forEach(m=>{
+        mhtml += `
+          <div class="cal-meal-row">
+            <div class="cal-meal-desc">${m.name} ${m.amount ? `<span class="amt">(${m.amount})</span>` : ''}</div>
+            <div class="cal-meal-kcal">${fmtAmount(m.kcal)} کالری</div>
+            <button class="cal-meal-remove" data-id="${m.id}">✕</button>
+          </div>`;
+      });
+    }
+    document.getElementById('calMealList').innerHTML = mhtml;
+    document.querySelectorAll('.cal-meal-remove').forEach(el=>{
+      el.addEventListener('click', async ()=>{
+        const dd = await fetchDay(jy,jm,jd);
+        dd.meals = dd.meals.filter(m=>m.id !== el.dataset.id);
+        await saveDay(jy,jm,jd,dd);
+        renderHealthView();
+      });
+    });
+  }
+  renderMealList();
+
+  if(!document.getElementById('foodDataList')){
+    document.body.insertAdjacentHTML('beforeend', '<datalist id="foodDataList"></datalist>');
+  }
+  document.getElementById('foodDataList').innerHTML = Object.keys(FOOD_DB).map(k=>`<option value="${k}">`).join('');
+
+  function refreshPreview(){
+    const name = document.getElementById('calFoodInput').value;
+    const amountText = document.getElementById('calAmountInput').value;
+    const parsed = parseAmount(amountText);
+    const manualInput = document.getElementById('calManualInput');
+    const preview = document.getElementById('calPreview');
+    const per100 = findFoodCalories(name);
+    if(per100 !== null && parsed.grams > 0){
+      manualInput.value = Math.round(per100 * parsed.grams / 100);
+      preview.textContent = `≈ ${manualInput.value} کالری (بر اساس ${Math.round(parsed.grams)} گرم تخمینی — می‌تونی دستی عوضش کنی)`;
+    } else if(per100 !== null){
+      preview.textContent = `${per100} کالری در هر ۱۰۰ گرم — مقدار رو بنویس (گرم، لیوان، عدد...) یا خودت کالری کل رو بنویس`;
+    } else if(name.trim()){
+      preview.textContent = 'این غذا تو لیست نیست — کالریش رو خودت بنویس';
+    } else {
+      preview.textContent = '';
+    }
+  }
+  document.getElementById('calFoodInput').addEventListener('input', refreshPreview);
+  document.getElementById('calAmountInput').addEventListener('input', refreshPreview);
+
+  document.getElementById('calAddBtn').addEventListener('click', async ()=>{
+    const name = document.getElementById('calFoodInput').value.trim();
+    const amountText = document.getElementById('calAmountInput').value.trim();
+    const kcal = parseFloat(document.getElementById('calManualInput').value);
+    if(!name){ showToast('اسم غذا رو بنویس'); return; }
+    if(kcal === undefined || kcal === null || isNaN(kcal)){ showToast('کالری رو وارد کن'); return; }
+    const d = await fetchDay(jy,jm,jd);
+    d.meals.push({ id:'m'+Date.now(), name, amount: amountText, kcal });
+    await saveDay(jy,jm,jd,d);
+    renderHealthView();
+  });
+}
+async function monthCalorieTotal(jy,jm){
+  const daysInMonth = jDaysInMonth(jy,jm);
+  let total = 0;
+  for(let d=1; d<=daysInMonth; d++){
+    const data = await fetchDay(jy,jm,d);
+    total += dayCalorieTotal(data);
+  }
+  return total;
+}
+
+async function renderDailySetsContent(jy,jm,jd){
+  const data = await fetchDay(jy,jm,jd);
+  let html = '';
+  MUSCLE_GROUPS.forEach(group=>{
+    const list = (data.gym && data.gym[group]) || [];
+    html += `<div class="gym-group-block"><div class="section-title">${group}</div><div>`;
+    if(!list.length){
+      html += `<div class="empty-note">هنوز حرکتی اضافه نکردی</div>`;
+    } else {
+      list.forEach(ex=>{
+        html += `
+          <div class="expense-row">
+            <div class="expense-desc">${ex.name} ${ex.detail ? `<span style="opacity:0.6;font-size:11px;">(${ex.detail})</span>` : ''}</div>
+            <button class="gym-remove" data-group="${group}" data-id="${ex.id}">✕</button>
+          </div>`;
+      });
+    }
+    html += `</div>
+      <div class="add-expense-row">
+        <input type="text" class="desc gym-name-input" data-group="${group}" placeholder="اسم حرکت">
+        <input type="text" class="amt gym-detail-input" data-group="${group}" placeholder="ست×تکرار" style="width:110px;">
+        <button class="add-btn gym-add-btn" data-group="${group}">+</button>
+      </div>
+      <div class="gym-copy-row">
+        <label><input type="checkbox" class="gym-copy-week" data-group="${group}"> 🔁 تکرار تا یک هفته</label>
+        <label><input type="checkbox" class="gym-copy-month" data-group="${group}"> 🔁 تکرار تا پایان ماه</label>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('healthContent').innerHTML = html;
+
+  document.querySelectorAll('.gym-add-btn').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const group = btn.dataset.group;
+      const nameEl = document.querySelector(`.gym-name-input[data-group="${group}"]`);
+      const detailEl = document.querySelector(`.gym-detail-input[data-group="${group}"]`);
+      const name = nameEl.value.trim();
+      const detail = detailEl.value.trim();
+      if(!name) return;
+      const d = await fetchDay(jy,jm,jd);
+      d.gym[group].push({ id:'g'+Date.now(), name, detail });
+      await saveDay(jy,jm,jd,d);
+      renderHealthView();
+    });
+  });
+  document.querySelectorAll('.gym-remove').forEach(el=>{
+    el.addEventListener('click', async ()=>{
+      const group = el.dataset.group;
+      const d = await fetchDay(jy,jm,jd);
+      d.gym[group] = d.gym[group].filter(ex=>ex.id!==el.dataset.id);
+      await saveDay(jy,jm,jd,d);
+      renderHealthView();
+    });
+  });
+
+  document.querySelectorAll('.gym-copy-week').forEach(el=>{
+    el.addEventListener('change', async ()=>{
+      if(!el.checked) return;
+      const group = el.dataset.group;
+      const d = await fetchDay(jy,jm,jd);
+      if(!d.gym[group] || !d.gym[group].length){
+        showToast('اول یه حرکت برای این گروه اضافه کن');
+        el.checked = false;
+        return;
+      }
+      await copyGymGroupForward(jy,jm,jd,group,7);
+      showToast(`✓ ست‌های ${group} تا یک هفته آینده کپی شد`);
+    });
+  });
+  document.querySelectorAll('.gym-copy-month').forEach(el=>{
+    el.addEventListener('change', async ()=>{
+      if(!el.checked) return;
+      const group = el.dataset.group;
+      const d = await fetchDay(jy,jm,jd);
+      if(!d.gym[group] || !d.gym[group].length){
+        showToast('اول یه حرکت برای این گروه اضافه کن');
+        el.checked = false;
+        return;
+      }
+      const remaining = jDaysInMonth(jy,jm) - jd;
+      await copyGymGroupForward(jy,jm,jd,group,remaining);
+      showToast(`✓ ست‌های ${group} تا پایان ماه کپی شد`);
+    });
+  });
+}
+
+async function copyGymGroupForward(jy,jm,jd,group,daysCount){
+  const source = await fetchDay(jy,jm,jd);
+  const sourceList = JSON.parse(JSON.stringify(source.gym[group] || []));
+  for(let i=1; i<=daysCount; i++){
+    const [ty,tm,td] = addDaysJalali(jy,jm,jd,i);
+    const target = await fetchDay(ty,tm,td);
+    target.gym[group] = JSON.parse(JSON.stringify(sourceList));
+    await saveDay(ty,tm,td,target);
+  }
+}
+
+/* ---------- FINANCE TAB (two columns: expenses right, income left) ---------- */
+async function renderFinanceView(){
+  const {jy,jm,jd} = anchor;
+  const wd = jWeekdayNames[weekdayShift(jy,jm,jd)];
+  document.getElementById('titleMain').textContent = `${wd} ${jd} ${jMonthNames[jm-1]}`;
+  document.getElementById('titleSub').textContent = `${jy}`;
+
+  const data = await fetchDay(jy,jm,jd);
+  const expSum = data.expenses.reduce((s,e)=>s+Number(e.amount||0),0);
+  const incSum = (data.income||[]).reduce((s,e)=>s+Number(e.amount||0),0);
+  const monthExp = await monthExpenseTotal(jy,jm);
+  const monthInc = await monthIncomeTotal(jy,jm);
+  const yearExp = await yearExpenseTotal(jy);
+  const yearInc = await yearIncomeTotal(jy);
+
+  let html = `<button class="subtab-back" id="backToDayBtn">→ بازگشت به روز</button>`;
+  html += `<div class="section-title" style="font-size:18px;margin-bottom:10px;">💰 هزینه‌ها و درآمد</div>`;
+
+  html += `<div class="finance-columns">`;
+
+  // Expenses (right column)
+  html += `<div class="finance-col expense-col"><div class="col-title">هزینه‌ها</div><div id="expenseListBox">`;
+  if(!data.expenses.length){
+    html += `<div class="empty-note">ثبت نشده</div>`;
+  } else {
+    data.expenses.forEach(e=>{
+      html += `
+        <div class="expense-row">
+          <div class="expense-desc">${e.desc}</div>
+          <div class="expense-amt">${fmtCompact(e.amount)}</div>
+          <button class="expense-remove" data-id="${e.id}">✕</button>
+        </div>`;
+    });
+  }
+  html += `</div>
+    <div class="add-expense-row">
+      <input type="text" class="desc" id="newExpDesc" placeholder="بابت چی؟">
+      <input type="number" class="amt" id="newExpAmt" placeholder="مبلغ" step="0.01" inputmode="decimal">
+      <button class="add-btn" id="addExpBtn">+</button>
+    </div>
+    <div class="day-sum">${fmtAmount(expSum)} تومان</div>
+  </div>`;
+
+  // Income (left column)
+  html += `<div class="finance-col income-col"><div class="col-title">درآمد</div><div id="incomeListBox">`;
+  if(!(data.income||[]).length){
+    html += `<div class="empty-note">ثبت نشده</div>`;
+  } else {
+    data.income.forEach(e=>{
+      html += `
+        <div class="expense-row">
+          <div class="expense-desc">${e.desc}</div>
+          <div class="expense-amt" style="color:var(--forest-deep);">${fmtCompact(e.amount)}</div>
+          <button class="income-remove" data-id="${e.id}">✕</button>
+        </div>`;
+    });
+  }
+  html += `</div>
+    <div class="add-expense-row">
+      <input type="text" class="desc" id="newIncDesc" placeholder="بابت چی؟">
+      <input type="number" class="amt" id="newIncAmt" placeholder="مبلغ" step="0.01" inputmode="decimal">
+      <button class="add-btn" id="addIncBtn">+</button>
+    </div>
+    <div class="day-sum">${fmtAmount(incSum)} تومان</div>
+  </div>`;
+
+  html += `</div>`; // .finance-columns
+
+  html += `<div class="finance-summary-title">جمع این ماه</div>`;
+  html += `<div class="finance-summary-grid">
+    <div class="finance-summary-card expense"><div class="fsc-label">هزینه</div><div class="fsc-value">${fmtAmount(monthExp)}</div></div>
+    <div class="finance-summary-card income"><div class="fsc-label">درآمد</div><div class="fsc-value">${fmtAmount(monthInc)}</div></div>
+  </div>`;
+  html += `<div class="finance-summary-title">جمع سال ${jy}</div>`;
+  html += `<div class="finance-summary-grid">
+    <div class="finance-summary-card expense"><div class="fsc-label">هزینه</div><div class="fsc-value">${fmtAmount(yearExp)}</div></div>
+    <div class="finance-summary-card income"><div class="fsc-label">درآمد</div><div class="fsc-value">${fmtAmount(yearInc)}</div></div>
+  </div>`;
+
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('backToDayBtn').addEventListener('click', ()=> setView('day', {jy,jm,jd}));
+  document.getElementById('addExpBtn').addEventListener('click', addExpense);
+  document.getElementById('addIncBtn').addEventListener('click', addIncome);
+  document.querySelectorAll('.expense-remove').forEach(el=>{
+    el.addEventListener('click', ()=> removeExpense(el.dataset.id));
+  });
+  document.querySelectorAll('.income-remove').forEach(el=>{
+    el.addEventListener('click', ()=> removeIncome(el.dataset.id));
+  });
+
   async function addExpense(){
     const descEl = document.getElementById('newExpDesc');
     const amtEl = document.getElementById('newExpAmt');
@@ -666,15 +1568,48 @@ async function renderDayView(){
     const d = await fetchDay(jy,jm,jd);
     d.expenses.push({ id: 'e'+Date.now(), desc, amount: amt });
     await saveDay(jy,jm,jd,d);
-    renderDayView();
+    renderFinanceView();
   }
   async function removeExpense(id){
     const d = await fetchDay(jy,jm,jd);
     d.expenses = d.expenses.filter(e=>e.id!==id);
     await saveDay(jy,jm,jd,d);
-    renderDayView();
+    renderFinanceView();
+  }
+  async function addIncome(){
+    const descEl = document.getElementById('newIncDesc');
+    const amtEl = document.getElementById('newIncAmt');
+    const desc = descEl.value.trim();
+    const amt = parseFloat(amtEl.value);
+    if(!desc || !amt) return;
+    const d = await fetchDay(jy,jm,jd);
+    d.income = d.income || [];
+    d.income.push({ id: 'i'+Date.now(), desc, amount: amt });
+    await saveDay(jy,jm,jd,d);
+    renderFinanceView();
+  }
+  async function removeIncome(id){
+    const d = await fetchDay(jy,jm,jd);
+    d.income = (d.income||[]).filter(e=>e.id!==id);
+    await saveDay(jy,jm,jd,d);
+    renderFinanceView();
   }
 }
+async function monthIncomeTotal(jy,jm){
+  const daysInMonth = jDaysInMonth(jy,jm);
+  let total = 0;
+  for(let d=1; d<=daysInMonth; d++){
+    const data = await fetchDay(jy,jm,d);
+    total += (data.income||[]).reduce((s,e)=>s+Number(e.amount||0),0);
+  }
+  return total;
+}
+async function yearIncomeTotal(jy){
+  let total = 0;
+  for(let m=1; m<=12; m++){ total += await monthIncomeTotal(jy,m); }
+  return total;
+}
+
 
 async function monthExpenseTotal(jy,jm){
   const daysInMonth = jDaysInMonth(jy,jm);
@@ -682,6 +1617,13 @@ async function monthExpenseTotal(jy,jm){
   for(let d=1; d<=daysInMonth; d++){
     const data = await fetchDay(jy,jm,d);
     total += data.expenses.reduce((s,e)=>s+Number(e.amount||0),0);
+  }
+  return total;
+}
+async function yearExpenseTotal(jy){
+  let total = 0;
+  for(let m=1; m<=12; m++){
+    total += await monthExpenseTotal(jy,m);
   }
   return total;
 }
@@ -709,9 +1651,10 @@ async function renderWeekView(){
     const total = taskList.length;
     const sum = data.expenses.reduce((s,e)=>s+Number(e.amount||0),0);
     weekTotal += sum;
+    const holiday = isHoliday(wd.jy,wd.jm,wd.jd);
     const wdName = jWeekdayNames[weekdayShift(wd.jy,wd.jm,wd.jd)];
     html += `
-      <div class="week-row status-${status}" data-jy="${wd.jy}" data-jm="${wd.jm}" data-jd="${wd.jd}">
+      <div class="week-row status-${status}${holiday?' is-holiday':''}" data-jy="${wd.jy}" data-jm="${wd.jm}" data-jd="${wd.jd}">
         <div class="wd-name">${wdName}</div>
         <div class="wd-num">${wd.jd}</div>
         <div class="wd-stats">${total?`کار: ${done}/${total}`:''}${sum?` · هزینه: ${fmtAmount(sum)}`:''}</div>
@@ -750,16 +1693,22 @@ async function renderMonthView(){
     const sum = data.expenses.reduce((s,e)=>s+Number(e.amount||0),0);
     monthTotal += sum;
     const hasNote = data.note && data.note.trim().length > 0;
-    const noteText = hasNote ? 'یادداشت داشته‌اید' : 'یادداشتی نداشتید';
+    const holiday = isHoliday(jy,jm,d);
+    const [gy,gm,gd] = jalaliToGregorian(jy,jm,d);
+    const [,hm,hd] = getHijriDate(jy,jm,d);
     gridHtml += `
-      <div class="day status-${status}" data-jd="${d}">
+      <div class="day status-${status}${holiday?' is-holiday':''}" data-jd="${d}">
         <div class="num">${d}</div>
-        ${total ? `<div class="frac">${done}/${total}</div>` : ''}
-        <div class="note-status">${noteText}</div>
-        ${sum ? `<div class="exp-amt">${fmtCompact(sum)}</div>` : ''}
+        <div class="bottom-cluster">
+          ${total ? `<div class="frac">${done}/${total}</div>` : ''}
+          ${sum ? `<div class="exp-amt">${fmtCompact(sum)}</div>` : ''}
+          ${hasNote ? `<div class="note-emoji">😊</div>` : ''}
+        </div>
       </div>`;
   }
-  gridHtml += `</div><div class="month-total">جمع هزینه ${jMonthNames[jm-1]}: ${fmtAmount(monthTotal)} تومان</div>`;
+  const yearTotal = await yearExpenseTotal(jy);
+  gridHtml += `</div><div class="month-total">جمع هزینه ${jMonthNames[jm-1]}: ${fmtAmount(monthTotal)} تومان</div>
+    <div class="month-total">جمع هزینه سال ${jy}: ${fmtAmount(yearTotal)} تومان</div>`;
 
   document.getElementById('content').innerHTML = gridHtml;
   document.querySelectorAll('.day:not(.empty)').forEach(el=>{
@@ -783,6 +1732,7 @@ window.addEventListener('visibilitychange', ()=>{
 
 /* ---------- Init ---------- */
 (async function init(){
+  initTheme();
   await loadTasks();
   await renderAll();
 })();
