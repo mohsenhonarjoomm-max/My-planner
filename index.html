@@ -138,6 +138,8 @@
     cursor:pointer; flex-shrink:0;
   }
   .nav-btn:active{ transform: scale(0.92); }
+  .nav-btn-group{ display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .nav-btn-label{ font-size:9.5px; font-weight:700; color:var(--ink); opacity:0.6; }
   .title-block{ text-align:center; flex:1; }
   .title-main{ font-size:28px; font-weight:800; color:var(--ink); letter-spacing:-.3px; }
   .title-sub{ font-size:12px; color:var(--gold); font-weight:700; margin-top:3px; letter-spacing:.5px; }
@@ -159,7 +161,7 @@
   .grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
   .day{
     position:relative; border-radius:12px; aspect-ratio:1/1;
-    border:1px solid var(--line); padding:6px 2px;
+    border:1px solid var(--line); padding:6px 2px 5px;
     cursor:pointer;
     display:flex; flex-direction:column; align-items:center; justify-content:space-between;
     background: var(--past-bg); color: var(--ink); text-align:center;
@@ -168,22 +170,53 @@
   .day.status-today{ background: var(--today-bg); color:var(--today-text); }
   .day.status-future{ background: var(--future-bg); color:var(--future-text); }
   .day.status-past{ background: var(--past-bg); color:var(--ink); opacity:0.9; }
-  .day .num{ font-size:16px; font-weight:800; line-height:1; }
+  .day .top-block{ display:flex; flex-direction:column; align-items:center; }
+  .day .num{ font-size:14px; font-weight:800; line-height:1; }
   .day.is-holiday .num{
     display:inline-flex; align-items:center; justify-content:center;
-    width:21px; height:21px;
+    width:20px; height:20px;
     border:1.6px solid var(--holiday); border-radius:5px;
-    color: var(--holiday); font-weight:800; font-size:12.5px;
+    color: var(--holiday); font-weight:800; font-size:11.5px;
   }
-  .day .bottom-cluster{ display:flex; flex-direction:row; align-items:center; justify-content:center; gap:4px; flex-wrap:wrap; min-height:14px; }
-  .day .frac{ font-size:8.5px; font-weight:800; opacity:1; line-height:1; }
-  .day .exp-amt{ font-size:8px; font-weight:800; opacity:1; line-height:1; }
-  .day .note-emoji{ font-size:13px; line-height:1; }
+  .day .date-mini{ font-size:6.5px; opacity:0.85; font-weight:600; line-height:1.3; margin-top:2px; }
+  .day .note-emoji{ font-size:17px; line-height:1; min-height:17px; }
   .month-total{
     margin-top:16px; background:var(--paper-2); border:1px solid var(--line);
     border-radius:12px; padding:12px 14px; text-align:center;
     font-size:14px; font-weight:700; color:var(--ink);
   }
+  .month-bottom-row{
+    display:flex; justify-content:flex-start; align-items:stretch; gap:8px; margin-top:16px;
+  }
+  .mb-stat{
+    background:var(--paper-2); border:1px solid var(--line); border-radius:12px;
+    padding:9px 14px; text-align:center; min-width:76px;
+  }
+  .mb-label{ font-size:10px; font-weight:700; opacity:0.65; margin-bottom:3px; }
+  .mb-value{ font-size:13px; font-weight:800; color:var(--ink); }
+  .mb-icon-btn{
+    width:40px; height:40px; flex-shrink:0;
+    background: color-mix(in srgb, var(--gold) 22%, var(--paper-2));
+    border:1px solid var(--line); border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--ink); cursor:pointer;
+  }
+  .conv-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .conv-header-btns{ display:flex; gap:6px; }
+  .conv-header-btns .pill-btn{ padding:6px 11px; font-size:11px; }
+  .conv-card{
+    background:var(--paper-2); border:1px solid var(--line); border-radius:12px;
+    padding:10px 12px; text-align:center;
+  }
+  .conv-card-title{ display:flex; align-items:center; justify-content:center; gap:6px; font-size:12.5px; font-weight:800; margin-bottom:7px; opacity:0.85; }
+  .conv-fields{ display:grid; grid-template-columns:0.7fr 1.3fr 0.9fr; gap:6px; }
+  .conv-fields input, .conv-fields select{
+    width:100%; padding:9px 3px; border-radius:9px; border:1px solid var(--line);
+    background:var(--paper); font-family:'Vazirmatn',sans-serif; font-size:13px; color:var(--ink);
+    text-align:center; outline:none;
+  }
+  .conv-fields input:focus, .conv-fields select:focus{ border-color:var(--gold); }
+  .conv-arrow{ text-align:center; font-size:14px; opacity:0.45; margin:3px 0; }
 
   /* WEEK VIEW */
   .week-row{
@@ -213,6 +246,13 @@
     text-align:center; font-size:12.5px; font-weight:800; color:#fff;
     background:var(--holiday); border-radius:10px; padding:9px 14px; margin-bottom:10px;
   }
+  .goals-reminder-card{
+    background: color-mix(in srgb, var(--forest) 14%, var(--paper-2));
+    border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:10px;
+  }
+  .goals-reminder-title{ font-size:13px; font-weight:800; color:var(--forest-deep); margin-bottom:6px; }
+  .goals-reminder-item{ font-size:12.5px; color:var(--ink); line-height:1.7; }
+  .goals-reminder-edit{ font-size:11px; font-weight:700; color:var(--gold); text-align:left; margin-top:6px; cursor:pointer; }
   .quote-banner{
     text-align:center; font-size:12.5px; font-weight:600; color:var(--ink);
     background:var(--gold-soft); border-radius:10px; padding:10px 14px; margin-bottom:10px;
@@ -274,6 +314,20 @@
     margin-top:16px; width:100%; padding:13px; border-radius:12px; border:none;
     background-color: color-mix(in srgb, var(--forest) 75%, transparent); color:#fff; font-weight:800; font-size:14px; cursor:pointer;
   }
+  .search-input{
+    width:100%; padding:13px 14px; border-radius:12px; border:1px solid var(--line);
+    background:var(--paper-2); font-family:'Vazirmatn',sans-serif; font-size:15px; color:var(--ink);
+    outline:none; margin-bottom:14px;
+  }
+  .search-input:focus{ border-color:var(--gold); }
+  .search-result-row{
+    display:block; padding:11px 4px; border-bottom:1px solid var(--line); cursor:pointer;
+  }
+  .search-result-row:last-child{ border-bottom:none; }
+  .search-result-date{ font-size:12px; font-weight:800; color:var(--forest-deep); margin-bottom:3px; }
+  .search-result-snippet{ font-size:12.5px; color:var(--ink); opacity:0.85; line-height:1.6; }
+  .search-result-snippet mark{ background:var(--gold-soft); color:var(--ink); border-radius:3px; padding:0 2px; }
+  .search-section-label{ font-size:11px; font-weight:800; opacity:0.6; margin:10px 0 4px; }
   .add-row{ display:flex; gap:8px; margin-top:10px; }
   .add-row input{
     flex:1; padding:10px 12px; border-radius:10px; border:1px solid var(--line);
@@ -321,6 +375,14 @@
     font-size:13.5px; color:var(--ink); resize:vertical; outline:none;
   }
   .note-area:focus{ border-color:var(--gold); }
+  .emoji-picker{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+  .emoji-opt{
+    font-size:24px; padding:8px; border-radius:10px; border:1.5px solid transparent;
+    cursor:pointer; transition: background .15s, border-color .15s, transform .1s;
+  }
+  .emoji-opt:active{ transform: scale(0.9); }
+  .emoji-opt.selected{ border-color:var(--gold); background:var(--paper-2); }
+  .day .note-emoji{ cursor:pointer; }
   .save-btn-top{
     display:flex; align-items:center; gap:5px;
     background-color: color-mix(in srgb, var(--forest) 75%, transparent); color:#fff; border:none;
@@ -348,6 +410,38 @@
     background:rgba(255,255,255,0.15); border:none; color:#fff; border-radius:8px;
     padding:5px 10px; font-size:12px; font-weight:700; cursor:pointer; flex-shrink:0;
   }
+  .goals-top-banner{
+    position:fixed; top:0; left:0; right:0; z-index:200;
+    background: color-mix(in srgb, var(--forest) 88%, black);
+    color:#fff; font-size:12.5px; font-weight:700; text-align:center;
+    padding:10px 16px calc(10px + env(safe-area-inset-top));
+    padding-top: calc(10px + env(safe-area-inset-top));
+    transform: translateY(-100%); transition: transform .35s ease;
+  }
+  .goals-top-banner.show{ transform: translateY(0); }
+  .goals-summary-card{
+    display:flex; align-items:center; gap:12px;
+    background: color-mix(in srgb, var(--forest) 16%, var(--paper-2));
+    border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:14px;
+  }
+  .goals-summary-icon{ font-size:26px; }
+  .goals-summary-title{ font-size:14px; font-weight:800; color:var(--forest-deep); }
+  .goals-summary-sub{ font-size:11px; opacity:0.7; margin-top:2px; }
+  .goal-card{
+    display:flex; align-items:flex-start; gap:10px;
+    background:var(--paper-2); border:1px solid var(--line); border-radius:12px;
+    padding:11px 12px; margin-bottom:8px;
+  }
+  .goal-card.active{ border-color: color-mix(in srgb, var(--forest) 50%, var(--line)); }
+  .goal-check{
+    width:20px; height:20px; border-radius:6px; border:2px solid var(--gold);
+    flex-shrink:0; margin-top:2px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; background:transparent; font-size:12px; color:#fff;
+  }
+  .goal-check.checked{ background:var(--forest); border-color:var(--forest); }
+  .goal-body{ flex:1; cursor:pointer; }
+  .goal-text{ font-size:13.5px; font-weight:700; color:var(--ink); }
+  .goal-date{ font-size:11px; opacity:0.7; margin-top:4px; }
   .loading{ text-align:center; padding:40px; color:var(--ink); opacity:0.6; font-size:13px; }
   .tiny-footer{ text-align:center; font-size:8px; color:var(--ink); opacity:0.3; margin-top:20px; letter-spacing:2px; }
 
@@ -413,22 +507,31 @@
 </style>
 </head>
 <body>
+<div class="goals-top-banner" id="goalsTopBanner"></div>
 <div class="wrap">
   <div class="topbar">
     <button class="icon-btn" id="backBtn">🏠 صفحه اصلی</button>
     <div class="topbar-right">
+      <button class="theme-btn" id="goalsBtn">🎯</button>
+      <button class="theme-btn" id="searchBtn">🔍</button>
       <button class="theme-btn" id="themeBtn">🌙</button>
       <button class="pill-btn" id="todayBtn">امروز</button>
       <button class="save-btn-top" id="saveBtn">💾 ذخیره</button>
     </div>
   </div>
   <div class="titlebar">
-    <button class="nav-btn" id="nextBtn">‹</button>
+    <div class="nav-btn-group">
+      <button class="nav-btn" id="nextBtn">‹</button>
+      <div class="nav-btn-label">بعد</div>
+    </div>
     <div class="title-block">
       <div class="title-main" id="titleMain"></div>
       <div class="title-sub" id="titleSub"></div>
     </div>
-    <button class="nav-btn" id="prevBtn">›</button>
+    <div class="nav-btn-group">
+      <button class="nav-btn" id="prevBtn">›</button>
+      <div class="nav-btn-label">قبل</div>
+    </div>
   </div>
   <div class="legend">
     <span><i class="dotleg" style="background:var(--past-bg);border:1px solid var(--line)"></i>گذشته</span>
@@ -455,6 +558,25 @@
       <input type="time" id="alarmTimeInput">
     </div>
     <button class="alarm-save-btn" id="alarmSaveBtn">ذخیره الارم</button>
+  </div>
+</div>
+<div class="modal-overlay" id="searchModal">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <div class="modal-title">🔍 جستجو در یادداشت‌ها</div>
+      <button class="modal-close" id="searchModalClose">✕</button>
+    </div>
+    <input type="text" id="searchInput" placeholder="چی رو دنبالشی؟" class="search-input">
+    <div id="searchResults"></div>
+  </div>
+</div>
+<div class="modal-overlay" id="monthEmojiModal">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <div class="modal-title">انتخاب ایموجی</div>
+      <button class="modal-close" id="monthEmojiModalClose">✕</button>
+    </div>
+    <div class="emoji-picker" id="monthEmojiPicker"></div>
   </div>
 </div>
 
@@ -528,16 +650,26 @@ function gregorianToJDN(gy,gm,gd){
   const m = gm + 12*a - 3;
   return gd + Math.floor((153*m+2)/5) + 365*y + Math.floor(y/4) - Math.floor(y/100) + Math.floor(y/400) - 32045;
 }
+function jdnToGregorian(jdn){
+  const a = jdn + 32044;
+  const b = Math.floor((4*a+3)/146097);
+  const c = a - Math.floor((146097*b)/4);
+  const d = Math.floor((4*c+3)/1461);
+  const e = c - Math.floor((1461*d)/4);
+  const m = Math.floor((5*e+2)/153);
+  const day = e - Math.floor((153*m+2)/5) + 1;
+  const month = m + 3 - 12*Math.floor(m/10);
+  const year = 100*b + d - 4800 + Math.floor(m/10);
+  return [year, month, day];
+}
+const ISLAMIC_EPOCH = 1948440;
+function hijriToJDN(hy,hm,hd){
+  return hd + Math.ceil(29.5*(hm-1)) + (hy-1)*354 + Math.floor((3+11*hy)/30) + ISLAMIC_EPOCH - 1;
+}
 function jdnToHijri(jdn){
-  const islamicEpoch = 1948440;
-  let l = jdn - islamicEpoch + 10632;
-  const n = Math.floor((l-1)/10631);
-  l = l - 10631*n + 354;
-  const j = (Math.floor((10985-l)/5316))*(Math.floor((50*l)/17719)) + (Math.floor(l/5670))*(Math.floor((43*l)/15238));
-  l = l - (Math.floor((30-j)/15))*(Math.floor((17719*j)/50)) - (Math.floor(j/16))*(Math.floor((15238*j)/43)) + 29;
-  const month = Math.floor((24*l)/709);
-  const day = l - Math.floor((709*month)/24);
-  const year = 30*n + j - 30;
+  const year = Math.floor((30*(jdn - ISLAMIC_EPOCH) + 10646) / 10631);
+  const month = Math.min(12, Math.ceil((jdn - (29 + hijriToJDN(year,1,1))) / 29.5) + 1);
+  const day = jdn - hijriToJDN(year, month, 1) + 1;
   return [year, month, day];
 }
 function getHijriDate(jy,jm,jd){
@@ -724,7 +856,7 @@ function emptyGym(){
   MUSCLE_GROUPS.forEach(k=>{ g[k] = []; });
   return g;
 }
-function emptyDayData(){ return { done: [], expenses: [], income: [], reminders: {}, note: '', healthNote: '', meals: [], gym: emptyGym() }; }
+function emptyDayData(){ return { done: [], expenses: [], income: [], reminders: {}, note: '', healthNote: '', noteEmoji: '😊', meals: [], gym: emptyGym() }; }
 function ensureGymShape(data){
   const old = data.gym;
   if(!old || Array.isArray(old.exercises) || typeof old !== 'object'){
@@ -1027,6 +1159,130 @@ function parseAmount(text){
 function dayCalorieTotal(data){
   return (data.meals||[]).reduce((s,m)=>s+Number(m.kcal||0),0);
 }
+/* ---------- Search across all notes ---------- */
+function scanAllDayKeys(){
+  const keys = [];
+  for(let i=0; i<localStorage.length; i++){
+    const k = localStorage.key(i);
+    if(k && k.startsWith(LS_PREFIX + 'day:')) keys.push(k);
+  }
+  return keys;
+}
+function parseDayKey(key){
+  const raw = key.slice((LS_PREFIX + 'day:').length);
+  const parts = raw.split('-').map(Number);
+  return { jy: parts[0], jm: parts[1], jd: parts[2] };
+}
+function highlightMatch(text, query){
+  const nText = normalizeFa(text);
+  const nQuery = normalizeFa(query);
+  const idx = nText.indexOf(nQuery);
+  if(idx === -1 || !nQuery) return text.length > 90 ? text.slice(0,90)+'…' : text;
+  let start = Math.max(0, idx - 30);
+  let end = Math.min(text.length, idx + nQuery.length + 40);
+  let snippet = text.slice(start, end);
+  if(start > 0) snippet = '…' + snippet;
+  if(end < text.length) snippet = snippet + '…';
+  // re-find match position within the trimmed snippet for highlighting (best-effort on original casing)
+  const snippetNorm = normalizeFa(snippet);
+  const localIdx = snippetNorm.indexOf(nQuery);
+  if(localIdx === -1) return snippet;
+  return snippet.slice(0,localIdx) + '<mark>' + snippet.slice(localIdx, localIdx+nQuery.length) + '</mark>' + snippet.slice(localIdx+nQuery.length);
+}
+function searchAllNotes(query){
+  const nq = normalizeFa(query);
+  if(!nq) return [];
+  const results = [];
+  scanAllDayKeys().forEach(key=>{
+    let data;
+    try{ data = JSON.parse(localStorage.getItem(key)); }catch(e){ return; }
+    if(!data) return;
+    const { jy, jm, jd } = parseDayKey(key);
+    const fields = [
+      { label: 'یادداشت', text: data.note || '' },
+      { label: 'یادداشت سلامتی', text: data.healthNote || '' },
+    ];
+    fields.forEach(f=>{
+      if(!f.text || !f.text.trim()) return;
+      const nt = normalizeFa(f.text);
+      let matched = nt.includes(nq);
+      if(!matched && nq.length >= 3){
+        const words = nt.split(' ');
+        matched = words.some(w => w.length >= 3 && levenshtein(w, nq) <= 1);
+      }
+      if(matched){
+        results.push({ jy, jm, jd, label: f.label, snippet: highlightMatch(f.text, query) });
+      }
+    });
+  });
+  results.sort((a,b) => (b.jy*372 + b.jm*31 + b.jd) - (a.jy*372 + a.jm*31 + a.jd));
+  return results.slice(0, 40);
+}
+function recentNotes(){
+  const results = [];
+  scanAllDayKeys().forEach(key=>{
+    let data;
+    try{ data = JSON.parse(localStorage.getItem(key)); }catch(e){ return; }
+    if(!data) return;
+    const { jy, jm, jd } = parseDayKey(key);
+    if(data.note && data.note.trim()){
+      results.push({ jy, jm, jd, label: 'یادداشت', snippet: data.note.length>90?data.note.slice(0,90)+'…':data.note });
+    }
+    if(data.healthNote && data.healthNote.trim()){
+      results.push({ jy, jm, jd, label: 'یادداشت سلامتی', snippet: data.healthNote.length>90?data.healthNote.slice(0,90)+'…':data.healthNote });
+    }
+  });
+  results.sort((a,b) => (b.jy*372 + b.jm*31 + b.jd) - (a.jy*372 + a.jm*31 + a.jd));
+  return results.slice(0, 15);
+}
+function renderSearchResults(list, emptyMsg){
+  const box = document.getElementById('searchResults');
+  if(!list.length){
+    box.innerHTML = `<div class="empty-note">${emptyMsg}</div>`;
+    return;
+  }
+  box.innerHTML = list.map(r => `
+    <div class="search-result-row" data-jy="${r.jy}" data-jm="${r.jm}" data-jd="${r.jd}">
+      <div class="search-result-date">${r.jd} ${jMonthNames[r.jm-1]} ${r.jy} · ${r.label}</div>
+      <div class="search-result-snippet">${r.snippet}</div>
+    </div>`).join('');
+  document.querySelectorAll('.search-result-row').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      closeSearchModal();
+      setView('day', { jy: parseInt(el.dataset.jy), jm: parseInt(el.dataset.jm), jd: parseInt(el.dataset.jd) });
+    });
+  });
+}
+function openSearchModal(){
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchModal').classList.add('open');
+  document.getElementById('searchResults').innerHTML = `<div class="search-section-label">یادداشت‌های اخیر</div>`;
+  renderSearchResults(recentNotes(), 'هنوز یادداشتی ثبت نکردی');
+  setTimeout(()=> document.getElementById('searchInput').focus(), 150);
+}
+function closeSearchModal(){
+  document.getElementById('searchModal').classList.remove('open');
+}
+document.getElementById('searchBtn').addEventListener('click', openSearchModal);
+document.getElementById('goalsBtn').addEventListener('click', ()=> setView('goals', anchor));
+document.getElementById('searchModalClose').addEventListener('click', closeSearchModal);
+document.getElementById('searchModal').addEventListener('click', (e)=>{
+  if(e.target.id === 'searchModal') closeSearchModal();
+});
+let searchDebounce = null;
+document.getElementById('searchInput').addEventListener('input', (e)=>{
+  clearTimeout(searchDebounce);
+  const q = e.target.value;
+  searchDebounce = setTimeout(()=>{
+    if(!q.trim()){
+      document.getElementById('searchResults').innerHTML = `<div class="search-section-label">یادداشت‌های اخیر</div>`;
+      renderSearchResults(recentNotes(), 'هنوز یادداشتی ثبت نکردی');
+    } else {
+      renderSearchResults(searchAllNotes(q), 'چیزی پیدا نشد');
+    }
+  }, 120);
+});
+
 /* ---------- Alarm modal ---------- */
 function openAlarmModal(jy,jm,jd){
   window.__alarmCtx = {jy,jm,jd};
@@ -1080,12 +1336,14 @@ document.getElementById('todayBtn').addEventListener('click', ()=>{
 });
 const DAY_SCOPED_VIEWS = ['day','health','finance'];
 document.getElementById('nextBtn').addEventListener('click', ()=>{
+  if(view === 'converter' || view === 'goals') return;
   if(DAY_SCOPED_VIEWS.includes(view)){ const n = addDaysJalali(anchor.jy,anchor.jm,anchor.jd,1); anchor={jy:n[0],jm:n[1],jd:n[2]}; }
   else if(view === 'week'){ const n = addDaysJalali(anchor.jy,anchor.jm,anchor.jd,7); anchor={jy:n[0],jm:n[1],jd:n[2]}; }
   else{ anchor.jm++; if(anchor.jm>12){anchor.jm=1; anchor.jy++;} anchor.jd = Math.min(anchor.jd, jDaysInMonth(anchor.jy,anchor.jm)); }
   renderAll();
 });
 document.getElementById('prevBtn').addEventListener('click', ()=>{
+  if(view === 'converter' || view === 'goals') return;
   if(DAY_SCOPED_VIEWS.includes(view)){ const n = addDaysJalali(anchor.jy,anchor.jm,anchor.jd,-1); anchor={jy:n[0],jm:n[1],jd:n[2]}; }
   else if(view === 'week'){ const n = addDaysJalali(anchor.jy,anchor.jm,anchor.jd,-7); anchor={jy:n[0],jm:n[1],jd:n[2]}; }
   else{ anchor.jm--; if(anchor.jm<1){anchor.jm=12; anchor.jy--;} anchor.jd = Math.min(anchor.jd, jDaysInMonth(anchor.jy,anchor.jm)); }
@@ -1101,6 +1359,8 @@ async function renderAll(){
   else if(view === 'week') await renderWeekView();
   else if(view === 'health') await renderHealthView();
   else if(view === 'finance') await renderFinanceView();
+  else if(view === 'converter') await renderConverterView();
+  else if(view === 'goals') await renderGoalsView();
   else await renderMonthView();
 }
 
@@ -1123,6 +1383,16 @@ async function renderDayView(){
     <div class="dhc-dates">میلادی: ${formatGregorian(jy,jm,jd)} &nbsp;•&nbsp; قمری: ${formatHijri(jy,jm,jd)}</div>
   </div>`;
   if(holidayLabel) html += `<div class="holiday-banner">🔴 تعطیل — ${holidayLabel}</div>`;
+
+  const myActiveGoals = activeGoals();
+  if(myActiveGoals.length){
+    html += `<div class="goals-reminder-card">
+      <div class="goals-reminder-title">🎯 اهداف فعالت</div>
+      ${myActiveGoals.map(g=>`<div class="goals-reminder-item">• ${g.text}</div>`).join('')}
+      <div class="goals-reminder-edit" id="goToGoalsBtn">مدیریت اهداف ←</div>
+    </div>`;
+  }
+
   html += `<div class="quote-banner">✨ ${getDayQuote(jy,jm,jd)}</div>`;
 
   const calTotal = dayCalorieTotal(data);
@@ -1163,8 +1433,6 @@ async function renderDayView(){
       <button class="add-btn" id="addTaskBtn">+</button>
     </div>
     <button class="alarm-btn" id="openAlarmBtn">⏰ تنظیم الارم</button>
-    <button class="notif-btn" id="notifBtn">🔔 فعال‌سازی اعلان یادآور</button>
-    <div class="reminder-note">یادآورها وقتی کار می‌کنند که این صفحه در مرورگر باز باشد. اپل اجازه نمی‌ده صفحات وب، گوشی رو ویبره کنن یا زنگ بزنن وقتی سایلنته یا خاموشه — این محدودیت خود آیفونه. اگه یادآوری مطمئن (با ویبره واقعی و زنگ حتی در حالت سایلنت) می‌خوای، بهم بگو کدوم کار و چه ساعتی، تا برات توی اپ Reminders خودِ گوشیت ثبتش کنم.</div>
   </div>`;
 
   // Note
@@ -1186,6 +1454,10 @@ async function renderDayView(){
   document.getElementById('openAlarmBtn').addEventListener('click', ()=> openAlarmModal(jy,jm,jd));
   document.getElementById('openHealthTab').addEventListener('click', ()=> setView('health', {jy,jm,jd}));
   document.getElementById('openFinanceTab').addEventListener('click', ()=> setView('finance', {jy,jm,jd}));
+  if(document.getElementById('goToGoalsBtn')){
+    document.getElementById('goToGoalsBtn').addEventListener('click', ()=> setView('goals', {jy,jm,jd}));
+  }
+  if(status === 'today') maybeShowGoalsReminder();
   const noteArea = document.getElementById('noteArea');
   let noteTimer = null;
   noteArea.addEventListener('input', ()=>{
@@ -1198,12 +1470,6 @@ async function renderDayView(){
     await saveDay(jy,jm,jd,d);
   }
   window.__saveCurrentDayNote = saveNoteNow;
-
-  document.getElementById('notifBtn').addEventListener('click', ()=>{
-    if("Notification" in window) Notification.requestPermission().then(p=>{
-      showToast(p==='granted' ? 'اعلان‌ها فعال شد' : 'دسترسی اعلان داده نشد');
-    });
-  });
 
   async function toggleTask(task){
     const d = await fetchDay(jy,jm,jd);
@@ -1698,17 +1964,20 @@ async function renderMonthView(){
     const [,hm,hd] = getHijriDate(jy,jm,d);
     gridHtml += `
       <div class="day status-${status}${holiday?' is-holiday':''}" data-jd="${d}">
-        <div class="num">${d}</div>
-        <div class="bottom-cluster">
-          ${total ? `<div class="frac">${done}/${total}</div>` : ''}
-          ${sum ? `<div class="exp-amt">${fmtCompact(sum)}</div>` : ''}
-          ${hasNote ? `<div class="note-emoji">😊</div>` : ''}
+        <div class="top-block">
+          <div class="num">${d}</div>
+          <div class="date-mini">م ${gd}/${gm} · ق ${hd}/${hm}</div>
         </div>
+        <div class="note-emoji">${hasNote ? (data.noteEmoji || '😊') : ''}</div>
       </div>`;
   }
   const yearTotal = await yearExpenseTotal(jy);
-  gridHtml += `</div><div class="month-total">جمع هزینه ${jMonthNames[jm-1]}: ${fmtAmount(monthTotal)} تومان</div>
-    <div class="month-total">جمع هزینه سال ${jy}: ${fmtAmount(yearTotal)} تومان</div>`;
+  const ICON_CONVERT = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 15l3 3-3 3M13 15l-3 3 3 3"/></svg>`;
+  gridHtml += `</div><div class="month-bottom-row">
+    <div class="mb-icon-btn" id="openConverterTab">${ICON_CONVERT}</div>
+    <div class="mb-stat"><div class="mb-label">این ماه</div><div class="mb-value">${fmtCompact(monthTotal)}</div></div>
+    <div class="mb-stat"><div class="mb-label">امسال</div><div class="mb-value">${fmtCompact(yearTotal)}</div></div>
+  </div>`;
 
   document.getElementById('content').innerHTML = gridHtml;
   document.querySelectorAll('.day:not(.empty)').forEach(el=>{
@@ -1716,7 +1985,318 @@ async function renderMonthView(){
       setView('day', { jy, jm, jd: parseInt(el.dataset.jd) });
     });
   });
+  document.querySelectorAll('.note-emoji').forEach(el=>{
+    if(!el.textContent) return;
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const dayEl = el.closest('.day');
+      openMonthEmojiModal(jy, jm, parseInt(dayEl.dataset.jd));
+    });
+  });
+  document.getElementById('openConverterTab').addEventListener('click', ()=>{
+    setView('converter', anchor);
+  });
 }
+
+/* ---------- Month-cell emoji picker ---------- */
+const MONTH_EMOJI_LIST = ['😂','😍','❤️','🌹','😉','🤲🏻','💪','🤍','🥹','🥰','🙂','😇','😃','🤨','🥳','😡','😈','🙏🏻','👁️','☹️'];
+function openMonthEmojiModal(jy,jm,jd){
+  window.__monthEmojiCtx = { jy, jm, jd };
+  renderMonthEmojiOptions();
+  document.getElementById('monthEmojiModal').classList.add('open');
+}
+function closeMonthEmojiModal(){
+  document.getElementById('monthEmojiModal').classList.remove('open');
+}
+async function renderMonthEmojiOptions(){
+  const ctx = window.__monthEmojiCtx;
+  const data = await fetchDay(ctx.jy, ctx.jm, ctx.jd);
+  const current = data.noteEmoji || '😊';
+  document.getElementById('monthEmojiPicker').innerHTML = MONTH_EMOJI_LIST.map(e =>
+    `<span class="emoji-opt ${e===current?'selected':''}" data-emoji="${e}">${e}</span>`
+  ).join('');
+  document.querySelectorAll('#monthEmojiPicker .emoji-opt').forEach(el=>{
+    el.addEventListener('click', async ()=>{
+      const c = window.__monthEmojiCtx;
+      const d = await fetchDay(c.jy, c.jm, c.jd);
+      d.noteEmoji = el.dataset.emoji;
+      await saveDay(c.jy, c.jm, c.jd, d);
+      closeMonthEmojiModal();
+      renderMonthView();
+    });
+  });
+}
+document.getElementById('monthEmojiModalClose').addEventListener('click', closeMonthEmojiModal);
+document.getElementById('monthEmojiModal').addEventListener('click', (e)=>{
+  if(e.target.id === 'monthEmojiModal') closeMonthEmojiModal();
+});
+
+/* ---------- GOALS PAGE (year-round, always visible) ---------- */
+function loadGoals(){
+  const raw = lsGet('goals');
+  return raw ? JSON.parse(raw) : [];
+}
+function saveGoalsData(goals){
+  lsSet('goals', JSON.stringify(goals));
+}
+function activeGoals(){
+  return loadGoals().filter(g => g.active);
+}
+function showGoalsBanner(text){
+  const banner = document.getElementById('goalsTopBanner');
+  banner.textContent = text;
+  banner.classList.add('show');
+  clearTimeout(banner.__hideTimer);
+  banner.__hideTimer = setTimeout(()=> banner.classList.remove('show'), 5000);
+}
+function maybeShowGoalsReminder(){
+  const goals = activeGoals();
+  if(!goals.length) return;
+  const todayKey = `${tJy}-${tJm}-${tJd}`;
+  const shownKey = lsGet('goals_reminder_shown_date');
+  if(shownKey === todayKey) return;
+  lsSet('goals_reminder_shown_date', todayKey);
+  const names = goals.map(g=>g.text).join(' • ');
+  showGoalsBanner(`🎯 یادت نره: ${names}`);
+  if("Notification" in window && Notification.permission === 'granted'){
+    try{ new Notification('یادآوری اهداف', { body: names }); }catch(e){}
+  }
+}
+async function renderGoalsView(){
+  document.getElementById('titleMain').textContent = 'اهداف';
+  document.getElementById('titleSub').textContent = '';
+
+  const goals = loadGoals();
+  const activeCount = goals.filter(g=>g.active).length;
+  let html = `<button class="subtab-back" id="backToMonthBtn">→ بازگشت به ماه</button>`;
+
+  html += `<div class="goals-summary-card">
+    <div class="goals-summary-icon">🎯</div>
+    <div class="goals-summary-text">
+      <div class="goals-summary-title">${goals.length ? `${activeCount} از ${goals.length} هدف در حال پیگیری` : 'هنوز هدفی ثبت نکردی'}</div>
+      <div class="goals-summary-sub">هدف‌های فعال، هر روز جلوی چشمت می‌مونن</div>
+    </div>
+  </div>`;
+
+  html += `<div class="reminder-note" style="margin-bottom:16px;">هدف‌هایی که فعالشون کنی، هر روز بالای صفحه‌ی روزانه‌ت و یه اعلان کوتاه بالای صفحه نشونت داده می‌شن (وقتی این صفحه بازه). برای یادآوری واقعی حتی با گوشی خاموش/سایلنت، بگو کدوم هدف رو بخوای، توی اپ Reminders گوشیت هم ثبتش می‌کنم.</div>`;
+
+  html += `<div class="section"><div class="section-title">افزودن هدف جدید</div>
+    <input type="text" id="goalTextInput" placeholder="مثلاً: یادگیری زبان انگلیسی تا سطح پیشرفته" style="width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper-2);font-family:'Vazirmatn',sans-serif;font-size:14px;color:var(--ink);outline:none;margin-bottom:8px;">
+    <div class="conv-fields" style="margin-bottom:8px;">
+      <input type="number" id="goalDay" placeholder="روز" min="1" max="31">
+      <select id="goalMonth">
+        <option value="">ماه</option>
+        ${jMonthNames.map((n,i)=>`<option value="${i+1}">${n}</option>`).join('')}
+      </select>
+      <input type="number" id="goalYear" placeholder="سال" value="${tJy}">
+    </div>
+    <button class="alarm-save-btn" id="addGoalBtn">+ افزودن هدف</button>
+  </div>`;
+
+  html += `<div class="section"><div class="section-title">لیست اهداف</div><div id="goalsList">`;
+  if(!goals.length){
+    html += `<div class="empty-note">هنوز هدفی ننوشتی</div>`;
+  } else {
+    const todaySerial = tJy*372 + tJm*31 + tJd;
+    goals.forEach(g=>{
+      const hasDate = g.targetJy && g.targetJm && g.targetJd;
+      const dateLabel = hasDate ? `${g.targetJd} ${jMonthNames[g.targetJm-1]} ${g.targetJy}` : '';
+      let daysLabel = '';
+      if(hasDate){
+        const targetSerial = g.targetJy*372 + g.targetJm*31 + g.targetJd;
+        const diff = targetSerial - todaySerial;
+        daysLabel = diff > 0 ? `${diff} روز مونده` : diff === 0 ? 'امروزه!' : `${-diff} روز گذشته`;
+      }
+      html += `
+        <div class="goal-card ${g.active?'active':''}">
+          <div class="goal-check ${g.active?'checked':''}" data-id="${g.id}" data-act="goal-toggle">${g.active?'✓':''}</div>
+          <div class="goal-body" data-id="${g.id}" data-act="goal-toggle">
+            <div class="goal-text">${g.text}</div>
+            ${hasDate ? `<div class="goal-date">📅 ${dateLabel} · ${daysLabel}</div>` : ''}
+          </div>
+          <span class="chip-remove" data-id="${g.id}" data-act="goal-remove">✕</span>
+        </div>`;
+    });
+  }
+  html += `</div></div>`;
+
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('backToMonthBtn').addEventListener('click', ()=> setView('month', anchor));
+
+  document.getElementById('addGoalBtn').addEventListener('click', ()=>{
+    const textEl = document.getElementById('goalTextInput');
+    const dEl = document.getElementById('goalDay');
+    const mEl = document.getElementById('goalMonth');
+    const yEl = document.getElementById('goalYear');
+    const text = textEl.value.trim();
+    if(!text){ showToast('متن هدف رو بنویس'); return; }
+    const list = loadGoals();
+    list.push({
+      id: 'goal'+Date.now(),
+      text,
+      active: false,
+      targetJy: yEl.value ? parseInt(yEl.value) : null,
+      targetJm: mEl.value ? parseInt(mEl.value) : null,
+      targetJd: dEl.value ? parseInt(dEl.value) : null,
+    });
+    saveGoalsData(list);
+    renderGoalsView();
+  });
+
+  document.querySelectorAll('[data-act="goal-toggle"]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const list = loadGoals();
+      const g = list.find(x=>x.id===el.dataset.id);
+      if(g) g.active = !g.active;
+      saveGoalsData(list);
+      renderGoalsView();
+    });
+  });
+  document.querySelectorAll('[data-act="goal-remove"]').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const list = loadGoals().filter(x=>x.id!==el.dataset.id);
+      saveGoalsData(list);
+      renderGoalsView();
+    });
+  });
+}
+
+/* ---------- DATE CONVERTER TAB ---------- */
+async function renderConverterView(){
+  document.getElementById('titleMain').textContent = 'تبدیل تاریخ';
+  document.getElementById('titleSub').textContent = '';
+
+  const ICON_CAL = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`;
+  const ICON_GLOBE = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20a15 15 0 010-20"/></svg>`;
+  const ICON_MOON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12.5A8.5 8.5 0 1111.5 4a7 7 0 008.5 8.5z"/></svg>`;
+
+  const html = `
+    <button class="subtab-back" id="backToMonthBtn">→ بازگشت به ماه</button>
+    <div class="conv-header">
+      <div class="section-title" style="font-size:17px;margin:0;">تبدیل تاریخ</div>
+      <div class="conv-header-btns">
+        <button class="pill-btn" id="convTodayBtn">امروز</button>
+        <button class="pill-btn" id="convClearBtn">پاک کردن</button>
+      </div>
+    </div>
+
+    <div class="conv-card">
+      <div class="conv-card-title">${ICON_CAL}<span>شمسی</span></div>
+      <div class="conv-fields">
+        <input type="number" id="convJd" placeholder="روز" min="1" max="31">
+        <select id="convJm">
+          <option value="">ماه</option>
+          ${jMonthNames.map((n,i)=>`<option value="${i+1}">${n}</option>`).join('')}
+        </select>
+        <input type="number" id="convJy" placeholder="سال">
+      </div>
+    </div>
+    <div class="conv-arrow">⇅</div>
+    <div class="conv-card">
+      <div class="conv-card-title">${ICON_GLOBE}<span>میلادی</span></div>
+      <div class="conv-fields">
+        <input type="number" id="convGd" placeholder="روز" min="1" max="31">
+        <select id="convGm">
+          <option value="">ماه</option>
+          ${gMonthNames.map((n,i)=>`<option value="${i+1}">${n} (${i+1})</option>`).join('')}
+        </select>
+        <input type="number" id="convGy" placeholder="سال">
+      </div>
+    </div>
+    <div class="conv-arrow">⇅</div>
+    <div class="conv-card">
+      <div class="conv-card-title">${ICON_MOON}<span>قمری</span></div>
+      <div class="conv-fields">
+        <input type="number" id="convHd" placeholder="روز" min="1" max="30">
+        <select id="convHm">
+          <option value="">ماه</option>
+          ${hMonthNames.map((n,i)=>`<option value="${i+1}">${n} (${i+1})</option>`).join('')}
+        </select>
+        <input type="number" id="convHy" placeholder="سال">
+      </div>
+    </div>
+  `;
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('backToMonthBtn').addEventListener('click', ()=> setView('month', anchor));
+
+  const fJy = document.getElementById('convJy'), fJm = document.getElementById('convJm'), fJd = document.getElementById('convJd');
+  const fGy = document.getElementById('convGy'), fGm = document.getElementById('convGm'), fGd = document.getElementById('convGd');
+  const fHy = document.getElementById('convHy'), fHm = document.getElementById('convHm'), fHd = document.getElementById('convHd');
+  const allFields = [fJy,fJm,fJd,fGy,fGm,fGd,fHy,fHm,fHd];
+
+  function clearAll(){
+    allFields.forEach(f=> f.value = '');
+  }
+
+  function fillFromJalali(jy,jm,jd){
+    const [gy,gm,gd] = jalaliToGregorian(jy,jm,jd);
+    const [hy,hm,hd] = jdnToHijri(gregorianToJDN(gy,gm,gd));
+    fGy.value=gy; fGm.value=gm; fGd.value=gd;
+    fHy.value=hy; fHm.value=hm; fHd.value=hd;
+  }
+  function fillFromGregorian(gy,gm,gd){
+    const [jy,jm,jd] = gregorianToJalali(gy,gm,gd);
+    const [hy,hm,hd] = jdnToHijri(gregorianToJDN(gy,gm,gd));
+    fJy.value=jy; fJm.value=jm; fJd.value=jd;
+    fHy.value=hy; fHm.value=hm; fHd.value=hd;
+  }
+  function fillFromHijri(hy,hm,hd){
+    const jdn = hijriToJDN(hy,hm,hd);
+    const [gy,gm,gd] = jdnToGregorian(jdn);
+    const [jy,jm,jd] = gregorianToJalali(gy,gm,gd);
+    fJy.value=jy; fJm.value=jm; fJd.value=jd;
+    fGy.value=gy; fGm.value=gm; fGd.value=gd;
+  }
+
+  // If a group becomes incomplete (partially OR fully cleared), reset the whole
+  // converter so no stale/mismatched values are left in the other two groups.
+  function groupIncomplete(y,m,d){
+    const filled = [y.value, m.value, d.value].filter(v=>v!=='').length;
+    return filled < 3;
+  }
+
+  function tryFillJalali(){
+    if(groupIncomplete(fJy,fJm,fJd)){
+      const stillHasOthers = fGy.value || fHy.value;
+      if(stillHasOthers){ clearAll(); }
+      return;
+    }
+    const jy=parseInt(fJy.value), jm=parseInt(fJm.value), jd=parseInt(fJd.value);
+    if(jy && jm>=1 && jm<=12 && jd>=1 && jd<=31) fillFromJalali(jy,jm,jd);
+  }
+  function tryFillGregorian(){
+    if(groupIncomplete(fGy,fGm,fGd)){
+      const stillHasOthers = fJy.value || fHy.value;
+      if(stillHasOthers){ clearAll(); }
+      return;
+    }
+    const gy=parseInt(fGy.value), gm=parseInt(fGm.value), gd=parseInt(fGd.value);
+    if(gy && gm>=1 && gm<=12 && gd>=1 && gd<=31) fillFromGregorian(gy,gm,gd);
+  }
+  function tryFillHijri(){
+    if(groupIncomplete(fHy,fHm,fHd)){
+      const stillHasOthers = fJy.value || fGy.value;
+      if(stillHasOthers){ clearAll(); }
+      return;
+    }
+    const hy=parseInt(fHy.value), hm=parseInt(fHm.value), hd=parseInt(fHd.value);
+    if(hy && hm>=1 && hm<=12 && hd>=1 && hd<=30) fillFromHijri(hy,hm,hd);
+  }
+  [fJy,fJm,fJd].forEach(el=> el.addEventListener('input', tryFillJalali));
+  [fJm].forEach(el=> el.addEventListener('change', tryFillJalali));
+  [fGy,fGm,fGd].forEach(el=> el.addEventListener('input', tryFillGregorian));
+  [fGm].forEach(el=> el.addEventListener('change', tryFillGregorian));
+  [fHy,fHm,fHd].forEach(el=> el.addEventListener('input', tryFillHijri));
+  [fHm].forEach(el=> el.addEventListener('change', tryFillHijri));
+
+  document.getElementById('convTodayBtn').addEventListener('click', ()=>{
+    fJy.value=tJy; fJm.value=tJm; fJd.value=tJd;
+    fillFromJalali(tJy,tJm,tJd);
+  });
+  document.getElementById('convClearBtn').addEventListener('click', clearAll);
+}
+
 
 /* ---------- Save button + save-on-close ---------- */
 document.getElementById('saveBtn').addEventListener('click', async ()=>{
