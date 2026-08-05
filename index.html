@@ -92,6 +92,24 @@
   }
 
 
+  .planner-identity{ display:flex; align-items:center; justify-content:center; gap:6px; margin-top:8px; }
+  .planner-avatar{
+    width:18px; height:18px; border-radius:50%; background-color:var(--paper-2);
+    background-size:cover; background-position:center; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:9px; flex-shrink:0;
+  }
+  .planner-name{ font-size:9px; font-weight:700; opacity:0.4; color:var(--ink); }
+  .lightbox-overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:300;
+    display:none; align-items:center; justify-content:center;
+  }
+  .lightbox-overlay.open{ display:flex; }
+  .lightbox-overlay img{ max-width:92vw; max-height:85vh; border-radius:10px; }
+  .lightbox-close{
+    position:absolute; top:calc(20px + env(safe-area-inset-top)); left:20px;
+    width:38px; height:38px; border-radius:50%; border:none;
+    background:rgba(255,255,255,0.15); color:#fff; font-size:16px; cursor:pointer;
+  }
   .topbar{
     display:flex; align-items:center; justify-content:space-between;
     margin-bottom:10px;
@@ -190,10 +208,12 @@
   }
   .mb-stat{
     background:var(--paper-2); border:1px solid var(--line); border-radius:12px;
-    padding:9px 14px; text-align:center; min-width:76px;
+    padding:9px 14px; text-align:center; min-width:76px; cursor:pointer;
   }
   .mb-label{ font-size:10px; font-weight:700; opacity:0.65; margin-bottom:3px; }
   .mb-value{ font-size:13px; font-weight:800; color:var(--ink); }
+  .report-day-group{ margin-bottom:12px; }
+  .report-day-label{ font-size:11.5px; font-weight:800; color:var(--forest-deep); margin-bottom:4px; }
   .mb-icon-btn{
     width:40px; height:40px; flex-shrink:0;
     background: color-mix(in srgb, var(--gold) 22%, var(--paper-2));
@@ -248,11 +268,14 @@
   }
   .goals-reminder-card{
     background: color-mix(in srgb, var(--forest) 14%, var(--paper-2));
-    border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:10px;
+    border:1px solid var(--line); border-radius:10px; padding:8px 12px; margin-bottom:10px;
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
   }
-  .goals-reminder-title{ font-size:13px; font-weight:800; color:var(--forest-deep); margin-bottom:6px; }
-  .goals-reminder-item{ font-size:12.5px; color:var(--ink); line-height:1.7; }
-  .goals-reminder-edit{ font-size:11px; font-weight:700; color:var(--gold); text-align:left; margin-top:6px; cursor:pointer; }
+  .goals-reminder-title{ font-size:11.5px; font-weight:800; color:var(--forest-deep); white-space:nowrap; }
+  .goals-reminder-item{ font-size:11.5px; color:var(--ink); opacity:0.9; }
+  .goals-reminder-item::after{ content:'•'; margin-right:6px; opacity:0.5; }
+  .goals-reminder-item:last-of-type::after{ content:''; }
+  .goals-reminder-edit{ font-size:10.5px; font-weight:700; color:var(--gold); margin-right:auto; cursor:pointer; white-space:nowrap; }
   .quote-banner{
     text-align:center; font-size:12.5px; font-weight:600; color:var(--ink);
     background:var(--gold-soft); border-radius:10px; padding:10px 14px; margin-bottom:10px;
@@ -347,6 +370,8 @@
   .expense-desc{ flex:1; font-size:13px; }
   .expense-amt{ font-size:13px; font-weight:700; color:var(--ink); white-space:nowrap; }
   .expense-remove{ background:none; border:none; color:var(--red); font-size:14px; cursor:pointer; opacity:0.6; }
+  .row-edit-btn{ font-size:12px; opacity:0.55; cursor:pointer; padding:0 2px; }
+  .expense-row.editing-row{ background: color-mix(in srgb, var(--gold) 12%, transparent); border-radius:8px; }
   .add-expense-row{ display:flex; gap:6px; margin-top:6px; }
   .add-expense-row input{
     padding:10px 10px; border-radius:10px; border:1px solid var(--line);
@@ -375,6 +400,18 @@
     font-size:13.5px; color:var(--ink); resize:vertical; outline:none;
   }
   .note-area:focus{ border-color:var(--gold); }
+  .note-photo-btn{ font-size:18px; cursor:pointer; padding:2px 6px; }
+  .note-photos{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .note-photo-thumb-wrap{ position:relative; width:56px; height:56px; }
+  .note-photo-thumb{
+    width:56px; height:56px; object-fit:cover; border-radius:10px;
+    border:1px solid var(--line); cursor:pointer; display:block;
+  }
+  .note-photo-remove{
+    position:absolute; top:-6px; left:-6px; width:18px; height:18px; border-radius:50%;
+    background:var(--red); color:#fff; font-size:10px; display:flex; align-items:center;
+    justify-content:center; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.3);
+  }
   .emoji-picker{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
   .emoji-opt{
     font-size:24px; padding:8px; border-radius:10px; border:1.5px solid transparent;
@@ -419,6 +456,26 @@
     transform: translateY(-100%); transition: transform .35s ease;
   }
   .goals-top-banner.show{ transform: translateY(0); }
+  .reminder-popup-overlay{
+    position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.45);
+    display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  .reminder-popup-overlay.open{ display:flex; }
+  .reminder-popup-box{
+    background:var(--paper); border-radius:16px; padding:20px 18px; max-width:340px; width:100%;
+    position:relative; box-shadow:0 10px 40px rgba(0,0,0,0.3);
+  }
+  .reminder-popup-close{
+    position:absolute; top:10px; left:10px; width:28px; height:28px; border-radius:50%;
+    border:none; background:var(--paper-2); font-size:14px; color:var(--ink); cursor:pointer;
+  }
+  .reminder-popup-title{ font-size:15px; font-weight:800; text-align:center; margin-bottom:12px; color:var(--ink); }
+  .reminder-popup-item{
+    display:flex; flex-direction:column; gap:3px; background:var(--paper-2);
+    border-radius:10px; padding:10px 12px; margin-bottom:8px; text-align:center;
+  }
+  .reminder-popup-item b{ font-size:13.5px; color:var(--ink); }
+  .reminder-popup-item span{ font-size:11px; color:var(--ink); opacity:0.7; }
   .goals-summary-card{
     display:flex; align-items:center; gap:12px;
     background: color-mix(in srgb, var(--forest) 16%, var(--paper-2));
@@ -428,20 +485,66 @@
   .goals-summary-title{ font-size:14px; font-weight:800; color:var(--forest-deep); }
   .goals-summary-sub{ font-size:11px; opacity:0.7; margin-top:2px; }
   .goal-card{
-    display:flex; align-items:flex-start; gap:10px;
-    background:var(--paper-2); border:1px solid var(--line); border-radius:12px;
-    padding:11px 12px; margin-bottom:8px;
+    display:flex; align-items:flex-start; gap:8px;
+    background:var(--paper-2); border:1px solid var(--line); border-radius:10px;
+    padding:8px 10px; margin-bottom:6px;
   }
   .goal-card.active{ border-color: color-mix(in srgb, var(--forest) 50%, var(--line)); }
+  .goal-card.editing{ border-color:var(--gold); box-shadow: 0 0 0 1.5px var(--gold); }
   .goal-check{
     width:20px; height:20px; border-radius:6px; border:2px solid var(--gold);
     flex-shrink:0; margin-top:2px; display:flex; align-items:center; justify-content:center;
     cursor:pointer; background:transparent; font-size:12px; color:#fff;
   }
   .goal-check.checked{ background:var(--forest); border-color:var(--forest); }
-  .goal-body{ flex:1; cursor:pointer; }
-  .goal-text{ font-size:13.5px; font-weight:700; color:var(--ink); }
-  .goal-date{ font-size:11px; opacity:0.7; margin-top:4px; }
+  .goal-body{ flex:1; cursor:pointer; min-width:0; }
+  .goal-text{ font-size:12.5px; font-weight:700; color:var(--ink); }
+  .goal-date{ font-size:10px; opacity:0.7; margin-top:2px; }
+  .goal-actions{ display:flex; flex-direction:column; align-items:center; gap:3px; flex-shrink:0; }
+  .goal-action-btn{ font-size:11px; opacity:0.55; cursor:pointer; padding:2px 4px; }
+  .goal-action-btn.remove{ color:var(--red); opacity:0.75; }
+
+  .settings-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:11px 4px; border-bottom:1px solid var(--line);
+  }
+  .settings-row:last-child{ border-bottom:none; }
+  .settings-row-label{ font-size:13.5px; font-weight:600; color:var(--ink); }
+  .switch{
+    width:42px; height:24px; border-radius:14px; background:var(--past-bg);
+    border:1px solid var(--line); position:relative; cursor:pointer; flex-shrink:0; transition: background .15s;
+  }
+  .switch.on{ background: color-mix(in srgb, var(--forest) 80%, transparent); }
+  .switch-knob{
+    position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%;
+    background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.25); transition: right .15s;
+  }
+  .switch.on .switch-knob{ right:20px; }
+
+  .palette-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .palette-item{
+    border:1.5px solid var(--line); border-radius:12px; padding:8px; cursor:pointer; text-align:center;
+  }
+  .palette-item.selected{ border-color:var(--gold); box-shadow:0 0 0 1.5px var(--gold); }
+  .palette-swatches{ display:flex; height:22px; border-radius:6px; overflow:hidden; margin-bottom:6px; }
+  .palette-swatches span{ flex:1; }
+  .palette-name{ font-size:9.5px; font-weight:700; color:var(--ink); opacity:0.85; }
+
+  .settings-accordion{ border:1px solid var(--line); border-radius:12px; margin-bottom:10px; overflow:hidden; }
+  .settings-accordion-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:13px 14px; font-size:14px; font-weight:800; color:var(--ink);
+    background:var(--paper-2); cursor:pointer;
+  }
+  .acc-caret{ font-size:11px; opacity:0.6; }
+  .settings-accordion-body{ padding:12px 14px 14px; }
+
+  .palette-grid-compact{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .palette-item-sm{ border:1.5px solid var(--line); border-radius:9px; padding:5px; cursor:pointer; text-align:center; }
+  .palette-item-sm.selected{ border-color:var(--gold); box-shadow:0 0 0 1.5px var(--gold); }
+  .palette-swatches-sm{ display:flex; height:14px; border-radius:4px; overflow:hidden; margin-bottom:4px; }
+  .palette-swatches-sm span{ flex:1; }
+  .palette-name-sm{ font-size:7.5px; font-weight:700; color:var(--ink); opacity:0.8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .loading{ text-align:center; padding:40px; color:var(--ink); opacity:0.6; font-size:13px; }
   .tiny-footer{ text-align:center; font-size:8px; color:var(--ink); opacity:0.3; margin-top:20px; letter-spacing:2px; }
 
@@ -508,6 +611,13 @@
 </head>
 <body>
 <div class="goals-top-banner" id="goalsTopBanner"></div>
+<div class="reminder-popup-overlay" id="reminderPopupOverlay">
+  <div class="reminder-popup-box">
+    <button class="reminder-popup-close" id="reminderPopupCloseBtn">✕</button>
+    <div class="reminder-popup-title">🔔 یادآوری</div>
+    <div id="reminderPopupList"></div>
+  </div>
+</div>
 <div class="wrap">
   <div class="topbar">
     <button class="icon-btn" id="backBtn">🏠 صفحه اصلی</button>
@@ -516,7 +626,7 @@
       <button class="theme-btn" id="searchBtn">🔍</button>
       <button class="theme-btn" id="themeBtn">🌙</button>
       <button class="pill-btn" id="todayBtn">امروز</button>
-      <button class="save-btn-top" id="saveBtn">💾 ذخیره</button>
+      <button class="theme-btn" id="settingsBtn">⚙️</button>
     </div>
   </div>
   <div class="titlebar">
@@ -541,6 +651,10 @@
   </div>
   <div id="content"></div>
   <div class="tiny-footer">777&nbsp;&nbsp;&nbsp;369</div>
+  <div class="planner-identity">
+    <div class="planner-avatar" id="plannerAvatarDisplay">👤</div>
+    <div class="planner-name" id="plannerNameDisplay">M&amp;S</div>
+  </div>
 </div>
 <div class="toast" id="toast">
   <span id="toastMsg"></span>
@@ -568,6 +682,29 @@
     </div>
     <input type="text" id="searchInput" placeholder="چی رو دنبالشی؟" class="search-input">
     <div id="searchResults"></div>
+  </div>
+</div>
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <div class="modal-title">⚙️ تنظیمات</div>
+      <button class="modal-close" id="settingsModalClose">✕</button>
+    </div>
+    <div id="settingsModalBody"></div>
+  </div>
+</div>
+<div class="lightbox-overlay" id="photoLightbox">
+  <button class="lightbox-close" id="photoLightboxClose">✕</button>
+  <img id="photoLightboxImg" src="" alt="">
+</div>
+<div class="modal-overlay" id="monthReportModal">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <div class="modal-title" id="monthReportTitle">📊 گزارش هزینه‌های ماه</div>
+      <button class="modal-close" id="monthReportModalClose">✕</button>
+    </div>
+    <div id="monthReportTotal" class="day-sum" style="text-align:center;font-size:16px;margin-bottom:14px;"></div>
+    <div id="monthReportList"></div>
   </div>
 </div>
 <div class="modal-overlay" id="monthEmojiModal">
@@ -856,7 +993,7 @@ function emptyGym(){
   MUSCLE_GROUPS.forEach(k=>{ g[k] = []; });
   return g;
 }
-function emptyDayData(){ return { done: [], expenses: [], income: [], reminders: {}, note: '', healthNote: '', noteEmoji: '😊', meals: [], gym: emptyGym() }; }
+function emptyDayData(){ return { done: [], expenses: [], income: [], reminders: {}, note: '', healthNote: '', noteEmoji: '😊', meals: [], gym: emptyGym(), photos: [] }; }
 function ensureGymShape(data){
   const old = data.gym;
   if(!old || Array.isArray(old.exercises) || typeof old !== 'object'){
@@ -927,6 +1064,130 @@ document.getElementById('themeBtn').addEventListener('click', ()=>{
   applyTheme(next);
   lsSet('theme', next);
 });
+
+/* ---------- Settings: feature toggles, layout order, color palettes ---------- */
+const DEFAULT_SETTINGS = {
+  features: { calorie:true, gymSets:true, finance:true, goals:true, note:true, quote:true, search:true },
+  order: ['goals','quote','navrow','tasks','note'],
+  palette: null,
+  nameEnabled: false,
+  plannerName: '',
+  avatarDataUrl: '',
+};
+function loadSettings(){
+  const raw = lsGet('settings');
+  const s = raw ? JSON.parse(raw) : {};
+  return {
+    features: Object.assign({}, DEFAULT_SETTINGS.features, s.features||{}),
+    order: (s.order && s.order.length === DEFAULT_SETTINGS.order.length) ? s.order : [...DEFAULT_SETTINGS.order],
+    palette: s.palette || null,
+    nameEnabled: !!s.nameEnabled,
+    plannerName: s.plannerName || '',
+    avatarDataUrl: s.avatarDataUrl || '',
+  };
+}
+function saveSettings(s){ lsSet('settings', JSON.stringify(s)); }
+function featureEnabled(key){ return loadSettings().features[key] !== false; }
+function currentPlannerName(){
+  const s = loadSettings();
+  return (s.nameEnabled && s.plannerName.trim()) ? s.plannerName.trim() : 'M&S';
+}
+function applyPlannerIdentity(){
+  const s = loadSettings();
+  document.title = currentPlannerName();
+  const nameEl = document.getElementById('plannerNameDisplay');
+  if(nameEl) nameEl.textContent = currentPlannerName();
+  const avatarEl = document.getElementById('plannerAvatarDisplay');
+  if(avatarEl){
+    if(s.avatarDataUrl){ avatarEl.style.backgroundImage = `url(${s.avatarDataUrl})`; avatarEl.textContent=''; }
+    else{ avatarEl.style.backgroundImage = 'none'; avatarEl.textContent = '👤'; }
+  }
+}
+
+/* Resize + compress an uploaded image client-side (keeps localStorage usage small) */
+function resizeImageToDataUrl(file, maxDim, quality){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      const img = new Image();
+      img.onload = ()=>{
+        let w = img.width, h = img.height;
+        if(w > h && w > maxDim){ h = Math.round(h * maxDim/w); w = maxDim; }
+        else if(h > maxDim){ w = Math.round(w * maxDim/h); h = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality || 0.7));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+function openPhotoLightbox(dataUrl){
+  document.getElementById('photoLightboxImg').src = dataUrl;
+  document.getElementById('photoLightbox').classList.add('open');
+}
+function closePhotoLightbox(){
+  document.getElementById('photoLightbox').classList.remove('open');
+  document.getElementById('photoLightboxImg').src = '';
+}
+document.getElementById('photoLightboxClose').addEventListener('click', closePhotoLightbox);
+document.getElementById('photoLightbox').addEventListener('click', (e)=>{
+  if(e.target.id === 'photoLightbox') closePhotoLightbox();
+});
+
+const PALETTES = {
+  'soft-girl':    { name:'Soft Girl',    colors:['#FFD6E0','#FFC1CC','#FFB6C1','#F8EDE7','#FFF6F8'] },
+  'sage-dreams':  { name:'Sage Dreams',  colors:['#DCE5D4','#B7C9B0','#A3B18A','#6B8E6E','#EDEAE0'] },
+  'warm-neutrals':{ name:'Warm Neutrals',colors:['#F5E6D3','#E8D5C4','#D6B89E','#B38B6D','#8B6B4D'] },
+  'ocean-breeze': { name:'Ocean Breeze', colors:['#D0F0F7','#A8E0E9','#7EC8E3','#4FA3B7','#E6F6F8'] },
+  'lilac-haze':   { name:'Lilac Haze',   colors:['#E6E6FA','#D8B4FE','#C8A2C8','#A78BC5','#F2EEFF'] },
+  'sunset-glow':  { name:'Sunset Glow',  colors:['#FFD3B6','#FFB7A3','#FF8C66','#FFB347','#FFF1D0'] },
+  'modern-minimal':{name:'Modern Minimal',colors:['#F7F7F7','#E6E6E6','#CFCFCF','#A6A6A6','#333333'] },
+  'boho-vibes':   { name:'Boho Vibes',   colors:['#EADBC8','#D4A373','#B76E4D','#7A5E45','#EADBC8'] },
+  'blue-hour':    { name:'Blue Hour',    colors:['#E6ECF5','#B7C6E6','#6D8DBF','#3D5A80','#1B263B'] },
+  'rose-garden':  { name:'Rose Garden',  colors:['#FFE4E1','#FFB6C1','#E57373','#B94F6F','#6E2C3D'] },
+  'matcha-latte': { name:'Matcha Latte', colors:['#EAF4EA','#CDE7CD','#9ACD9A','#6FA56F','#8B5E3C'] },
+  'midnight-luxe':{ name:'Midnight Luxe',colors:['#0D1321','#1D1B2E','#3A254E','#D4AF37','#EEE6C9'] },
+};
+function hexToRgb(hex){
+  const h = hex.replace('#','');
+  return { r: parseInt(h.substr(0,2),16), g: parseInt(h.substr(2,2),16), b: parseInt(h.substr(4,2),16) };
+}
+function hexLightness(hex){
+  const {r,g,b} = hexToRgb(hex);
+  return (0.299*r + 0.587*g + 0.114*b) / 255;
+}
+function contrastFor(hex){
+  return hexLightness(hex) > 0.58 ? '#20261a' : '#f5f2ea';
+}
+function applyPalette(key){
+  const root = document.documentElement.style;
+  if(!key || !PALETTES[key]){
+    ['--future-bg','--lilac','--gold-soft','--gold','--forest','--today-bg','--forest-deep','--today-text','--future-text','--lilac-text']
+      .forEach(v => root.removeProperty(v));
+    return;
+  }
+  const sorted = [...PALETTES[key].colors].sort((a,b)=> hexLightness(a)-hexLightness(b));
+  const [c0,c1,c2,c3,c4] = sorted;
+  root.setProperty('--future-bg', c0);
+  root.setProperty('--lilac', c0);
+  root.setProperty('--gold-soft', c1);
+  root.setProperty('--gold', ensureDark(c2, 0.42));
+  root.setProperty('--forest', ensureDark(c3, 0.38));
+  root.setProperty('--today-bg', c3);
+  root.setProperty('--forest-deep', ensureDark(c4, 0.30));
+  root.setProperty('--today-text', contrastFor(c3));
+  root.setProperty('--future-text', contrastFor(c0));
+  root.setProperty('--lilac-text', contrastFor(c0));
+}
+function initPalette(){
+  const s = loadSettings();
+  if(s.palette) applyPalette(s.palette);
+}
 
 function showToast(msg){
   const t = document.getElementById('toast');
@@ -1377,6 +1638,8 @@ async function renderDayView(){
 
   const data = await fetchDay(jy,jm,jd);
 
+  const settings = loadSettings();
+
   const statusLabel = status==='past' ? 'این روز گذشته' : status==='today' ? 'امروز' : 'در انتظار این روز';
   let html = `<div class="day-header-card status-${status}">
     <div class="dhc-status">${statusLabel}</div>
@@ -1384,31 +1647,43 @@ async function renderDayView(){
   </div>`;
   if(holidayLabel) html += `<div class="holiday-banner">🔴 تعطیل — ${holidayLabel}</div>`;
 
-  const myActiveGoals = activeGoals();
-  if(myActiveGoals.length){
-    html += `<div class="goals-reminder-card">
-      <div class="goals-reminder-title">🎯 اهداف فعالت</div>
-      ${myActiveGoals.map(g=>`<div class="goals-reminder-item">• ${g.text}</div>`).join('')}
-      <div class="goals-reminder-edit" id="goToGoalsBtn">مدیریت اهداف ←</div>
-    </div>`;
+  if(settings.features.goals !== false){
+    const myActiveGoals = activeGoals();
+    if(myActiveGoals.length){
+      html += `<div class="goals-reminder-card">
+        <div class="goals-reminder-title">🎯 اهداف فعالت</div>
+        ${myActiveGoals.map(g=>`<div class="goals-reminder-item">${g.text}</div>`).join('')}
+        <div class="goals-reminder-edit" id="goToGoalsBtn">مدیریت اهداف ←</div>
+      </div>`;
+    }
   }
 
-  html += `<div class="quote-banner">✨ ${getDayQuote(jy,jm,jd)}</div>`;
+  if(settings.features.quote !== false){
+    html += `<div class="quote-banner">✨ ${getDayQuote(jy,jm,jd)}</div>`;
+  }
 
   const calTotal = dayCalorieTotal(data);
   const expSum = data.expenses.reduce((s,e)=>s+Number(e.amount||0),0);
   const incSum = (data.income||[]).reduce((s,e)=>s+Number(e.amount||0),0);
 
-  html += `<div class="quick-nav-row">
-    <div class="quick-nav-btn" id="openHealthTab">
-      <span class="qn-label">🏋️ ورزش و سلامتی</span>
-      <span class="qn-value">🔥 ${fmtAmount(calTotal)} کالری</span>
-    </div>
-    <div class="quick-nav-btn" id="openFinanceTab">
-      <span class="qn-label">💰 هزینه‌ها و درآمد</span>
-      <span class="qn-value">هزینه ${fmtCompact(expSum)} · درآمد ${fmtCompact(incSum)}</span>
-    </div>
-  </div>`;
+  const showHealthBtn = (settings.features.calorie !== false) || (settings.features.gymSets !== false);
+  const showFinanceBtn = settings.features.finance !== false;
+  if(showHealthBtn || showFinanceBtn){
+    html += `<div class="quick-nav-row">`;
+    if(showHealthBtn){
+      html += `<div class="quick-nav-btn" id="openHealthTab">
+        <span class="qn-label">🏋️ ورزش و سلامتی</span>
+        <span class="qn-value">🔥 ${fmtAmount(calTotal)} کالری</span>
+      </div>`;
+    }
+    if(showFinanceBtn){
+      html += `<div class="quick-nav-btn" id="openFinanceTab">
+        <span class="qn-label">💰 هزینه‌ها و درآمد</span>
+        <span class="qn-value">هزینه ${fmtCompact(expSum)} · درآمد ${fmtCompact(incSum)}</span>
+      </div>`;
+    }
+    html += `</div>`;
+  }
 
   // Tasks
   html += `<div class="section"><div class="section-title">کارهای روزانه</div><div class="task-list" id="taskListBox">`;
@@ -1436,9 +1711,48 @@ async function renderDayView(){
   </div>`;
 
   // Note
-  html += `<div class="section"><div class="section-title">یادداشت</div>
-    <textarea class="note-area" id="noteArea" placeholder="هر چیزی که می‌خوای برای این روز یادت بمونه...">${(data.note||'').replace(/</g,'&lt;')}</textarea>
-  </div>`;
+  if(settings.features.note !== false){
+    const photos = data.photos || [];
+    html += `<div class="section">
+      <div class="section-title" style="display:flex; align-items:center; justify-content:space-between;">
+        <span>یادداشت</span>
+        <span class="note-photo-btn" id="notePhotoBtn">📷</span>
+      </div>
+      <input type="file" id="notePhotoInput" accept="image/*" style="display:none;">
+      <textarea class="note-area" id="noteArea" placeholder="هر چیزی که می‌خوای برای این روز یادت بمونه...">${(data.note||'').replace(/</g,'&lt;')}</textarea>
+      <div class="note-photos" id="notePhotosBox">
+        ${photos.map(p=>`
+          <div class="note-photo-thumb-wrap">
+            <img src="${p.dataUrl}" class="note-photo-thumb" data-full="${p.dataUrl}">
+            <span class="note-photo-remove" data-id="${p.id}">✕</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Reminders (یادآوری) — separate from notes, date-triggered popup reminders
+  {
+    const allReminders = loadFutureReminders();
+    html += `<div class="section"><div class="section-title">🔔 یادآوری</div>
+      <div class="reminder-note" style="margin-bottom:8px;">یه یادآوری برای یه روزِ جلوتر بنویس؛ وقتی اون روز رسید، هر بار پلنر رو باز کنی وسط صفحه بهت نشونش می‌ده (۱۰ ثانیه، با دکمه‌ی بستن) — تا وقتی خودت خاموشش نکنی، حداکثر تا ۶ ساعت.</div>
+      <input type="text" id="remText" placeholder="متن یادآوری" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper-2);font-family:'Vazirmatn',sans-serif;font-size:13px;color:var(--ink);outline:none;margin-bottom:8px;">
+      <div class="conv-fields" style="margin-bottom:8px;">
+        <input type="number" id="remDay" placeholder="روز" min="1" max="31">
+        <select id="remMonth"><option value="">ماه</option>${jMonthNames.map((n,i)=>`<option value="${i+1}">${n}</option>`).join('')}</select>
+        <input type="number" id="remYear" placeholder="سال" value="${jy}">
+      </div>
+      <input type="time" id="remAlarmTime" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper-2);font-family:'Vazirmatn',sans-serif;font-size:13px;color:var(--ink);outline:none;margin-bottom:8px;">
+      <button class="alarm-save-btn" id="addReminderBtn" style="margin-top:0;">+ افزودن یادآوری</button>
+      <div id="reminderListBox" style="margin-top:10px;">
+        ${allReminders.length ? allReminders.map(r=>`
+          <div class="task-row ${r.active?'checked':''}">
+            <div class="task-check ${r.active?'checked':''}" data-id="${r.id}" data-act="rem-toggle">${r.active?'✓':''}</div>
+            <div class="task-label" data-id="${r.id}" data-act="rem-toggle">${r.text} <span style="opacity:0.6;font-size:11px;">(${r.targetJd} ${jMonthNames[r.targetJm-1]} ${r.targetJy}${r.alarmTime?' · '+r.alarmTime:''})</span></div>
+            <span class="chip-remove" data-id="${r.id}" data-act="rem-remove">✕</span>
+          </div>`).join('') : '<div class="empty-note">هنوز یادآوری‌ای ثبت نشده</div>'}
+      </div>
+    </div>`;
+  }
 
   document.getElementById('content').innerHTML = html;
 
@@ -1452,24 +1766,100 @@ async function renderDayView(){
   document.getElementById('addTaskBtn').addEventListener('click', addNewTask);
   document.getElementById('newTaskInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addNewTask(); });
   document.getElementById('openAlarmBtn').addEventListener('click', ()=> openAlarmModal(jy,jm,jd));
-  document.getElementById('openHealthTab').addEventListener('click', ()=> setView('health', {jy,jm,jd}));
-  document.getElementById('openFinanceTab').addEventListener('click', ()=> setView('finance', {jy,jm,jd}));
+  if(document.getElementById('openHealthTab')){
+    document.getElementById('openHealthTab').addEventListener('click', ()=> setView('health', {jy,jm,jd}));
+  }
+  if(document.getElementById('openFinanceTab')){
+    document.getElementById('openFinanceTab').addEventListener('click', ()=> setView('finance', {jy,jm,jd}));
+  }
   if(document.getElementById('goToGoalsBtn')){
     document.getElementById('goToGoalsBtn').addEventListener('click', ()=> setView('goals', {jy,jm,jd}));
   }
   if(status === 'today') maybeShowGoalsReminder();
+
+  document.getElementById('addReminderBtn').addEventListener('click', ()=>{
+    const textEl = document.getElementById('remText');
+    const dEl = document.getElementById('remDay');
+    const mEl = document.getElementById('remMonth');
+    const yEl = document.getElementById('remYear');
+    const tEl = document.getElementById('remAlarmTime');
+    const text = textEl.value.trim();
+    if(!text){ showToast('متن یادآوری رو بنویس'); return; }
+    if(!dEl.value || !mEl.value || !yEl.value){ showToast('تاریخ یادآوری رو کامل کن'); return; }
+    const list = loadFutureReminders();
+    list.push({
+      id: 'rem'+Date.now(),
+      text,
+      targetJy: parseInt(yEl.value),
+      targetJm: parseInt(mEl.value),
+      targetJd: parseInt(dEl.value),
+      alarmTime: tEl.value || null,
+      active: false,
+      firstShownAt: null,
+    });
+    saveFutureReminders(list);
+    renderDayView();
+  });
+  document.querySelectorAll('[data-act="rem-toggle"]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const list = loadFutureReminders();
+      const r = list.find(x=>x.id===el.dataset.id);
+      if(r){ r.active = !r.active; if(r.active) r.firstShownAt = null; }
+      saveFutureReminders(list);
+      renderDayView();
+    });
+  });
+  document.querySelectorAll('[data-act="rem-remove"]').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const list = loadFutureReminders().filter(x=>x.id!==el.dataset.id);
+      saveFutureReminders(list);
+      renderDayView();
+    });
+  });
+
   const noteArea = document.getElementById('noteArea');
   let noteTimer = null;
-  noteArea.addEventListener('input', ()=>{
-    clearTimeout(noteTimer);
-    noteTimer = setTimeout(saveNoteNow, 800);
-  });
+  if(noteArea){
+    noteArea.addEventListener('input', ()=>{
+      clearTimeout(noteTimer);
+      noteTimer = setTimeout(saveNoteNow, 800);
+    });
+  }
   async function saveNoteNow(){
     const d = await fetchDay(jy,jm,jd);
     d.note = noteArea.value;
     await saveDay(jy,jm,jd,d);
   }
-  window.__saveCurrentDayNote = saveNoteNow;
+  if(noteArea) window.__saveCurrentDayNote = saveNoteNow;
+
+  if(document.getElementById('notePhotoBtn')){
+    document.getElementById('notePhotoBtn').addEventListener('click', ()=>{
+      document.getElementById('notePhotoInput').click();
+    });
+    document.getElementById('notePhotoInput').addEventListener('change', async (e)=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      const dataUrl = await resizeImageToDataUrl(file, 900, 0.72);
+      const d = await fetchDay(jy,jm,jd);
+      d.photos = d.photos || [];
+      d.photos.push({ id:'p'+Date.now(), dataUrl });
+      await saveDay(jy,jm,jd,d);
+      renderDayView();
+    });
+    document.querySelectorAll('.note-photo-thumb').forEach(el=>{
+      el.addEventListener('click', ()=> openPhotoLightbox(el.dataset.full));
+    });
+    document.querySelectorAll('.note-photo-remove').forEach(el=>{
+      el.addEventListener('click', async (e)=>{
+        e.stopPropagation();
+        const d = await fetchDay(jy,jm,jd);
+        d.photos = (d.photos||[]).filter(p=>p.id!==el.dataset.id);
+        await saveDay(jy,jm,jd,d);
+        renderDayView();
+      });
+    });
+  }
 
   async function toggleTask(task){
     const d = await fetchDay(jy,jm,jd);
@@ -1736,6 +2126,8 @@ async function copyGymGroupForward(jy,jm,jd,group,daysCount){
 }
 
 /* ---------- FINANCE TAB (two columns: expenses right, income left) ---------- */
+let editingExpenseId = null;
+let editingIncomeId = null;
 async function renderFinanceView(){
   const {jy,jm,jd} = anchor;
   const wd = jWeekdayNames[weekdayShift(jy,jm,jd)];
@@ -1750,6 +2142,9 @@ async function renderFinanceView(){
   const yearExp = await yearExpenseTotal(jy);
   const yearInc = await yearIncomeTotal(jy);
 
+  const editingExpense = editingExpenseId ? data.expenses.find(e=>e.id===editingExpenseId) : null;
+  const editingIncome = editingIncomeId ? (data.income||[]).find(e=>e.id===editingIncomeId) : null;
+
   let html = `<button class="subtab-back" id="backToDayBtn">→ بازگشت به روز</button>`;
   html += `<div class="section-title" style="font-size:18px;margin-bottom:10px;">💰 هزینه‌ها و درآمد</div>`;
 
@@ -1762,18 +2157,20 @@ async function renderFinanceView(){
   } else {
     data.expenses.forEach(e=>{
       html += `
-        <div class="expense-row">
+        <div class="expense-row ${e.id===editingExpenseId?'editing-row':''}">
           <div class="expense-desc">${e.desc}</div>
           <div class="expense-amt">${fmtCompact(e.amount)}</div>
+          <span class="row-edit-btn" data-id="${e.id}" data-act="exp-edit">✏️</span>
           <button class="expense-remove" data-id="${e.id}">✕</button>
         </div>`;
     });
   }
   html += `</div>
     <div class="add-expense-row">
-      <input type="text" class="desc" id="newExpDesc" placeholder="بابت چی؟">
-      <input type="number" class="amt" id="newExpAmt" placeholder="مبلغ" step="0.01" inputmode="decimal">
-      <button class="add-btn" id="addExpBtn">+</button>
+      <input type="text" class="desc" id="newExpDesc" placeholder="بابت چی؟" value="${editingExpense ? editingExpense.desc.replace(/"/g,'&quot;') : ''}">
+      <input type="number" class="amt" id="newExpAmt" placeholder="مبلغ" step="0.01" inputmode="decimal" value="${editingExpense ? editingExpense.amount : ''}">
+      <button class="add-btn" id="addExpBtn">${editingExpense ? '✓' : '+'}</button>
+      ${editingExpense ? `<button class="add-btn" id="cancelExpEditBtn" style="background-color:color-mix(in srgb, var(--red) 55%, transparent);">✕</button>` : ''}
     </div>
     <div class="day-sum">${fmtAmount(expSum)} تومان</div>
   </div>`;
@@ -1785,18 +2182,20 @@ async function renderFinanceView(){
   } else {
     data.income.forEach(e=>{
       html += `
-        <div class="expense-row">
+        <div class="expense-row ${e.id===editingIncomeId?'editing-row':''}">
           <div class="expense-desc">${e.desc}</div>
           <div class="expense-amt" style="color:var(--forest-deep);">${fmtCompact(e.amount)}</div>
+          <span class="row-edit-btn" data-id="${e.id}" data-act="inc-edit">✏️</span>
           <button class="income-remove" data-id="${e.id}">✕</button>
         </div>`;
     });
   }
   html += `</div>
     <div class="add-expense-row">
-      <input type="text" class="desc" id="newIncDesc" placeholder="بابت چی؟">
-      <input type="number" class="amt" id="newIncAmt" placeholder="مبلغ" step="0.01" inputmode="decimal">
-      <button class="add-btn" id="addIncBtn">+</button>
+      <input type="text" class="desc" id="newIncDesc" placeholder="بابت چی؟" value="${editingIncome ? editingIncome.desc.replace(/"/g,'&quot;') : ''}">
+      <input type="number" class="amt" id="newIncAmt" placeholder="مبلغ" step="0.01" inputmode="decimal" value="${editingIncome ? editingIncome.amount : ''}">
+      <button class="add-btn" id="addIncBtn">${editingIncome ? '✓' : '+'}</button>
+      ${editingIncome ? `<button class="add-btn" id="cancelIncEditBtn" style="background-color:color-mix(in srgb, var(--red) 55%, transparent);">✕</button>` : ''}
     </div>
     <div class="day-sum">${fmtAmount(incSum)} تومان</div>
   </div>`;
@@ -1824,6 +2223,18 @@ async function renderFinanceView(){
   document.querySelectorAll('.income-remove').forEach(el=>{
     el.addEventListener('click', ()=> removeIncome(el.dataset.id));
   });
+  document.querySelectorAll('[data-act="exp-edit"]').forEach(el=>{
+    el.addEventListener('click', ()=>{ editingExpenseId = el.dataset.id; renderFinanceView(); });
+  });
+  document.querySelectorAll('[data-act="inc-edit"]').forEach(el=>{
+    el.addEventListener('click', ()=>{ editingIncomeId = el.dataset.id; renderFinanceView(); });
+  });
+  if(document.getElementById('cancelExpEditBtn')){
+    document.getElementById('cancelExpEditBtn').addEventListener('click', ()=>{ editingExpenseId = null; renderFinanceView(); });
+  }
+  if(document.getElementById('cancelIncEditBtn')){
+    document.getElementById('cancelIncEditBtn').addEventListener('click', ()=>{ editingIncomeId = null; renderFinanceView(); });
+  }
 
   async function addExpense(){
     const descEl = document.getElementById('newExpDesc');
@@ -1832,11 +2243,18 @@ async function renderFinanceView(){
     const amt = parseFloat(amtEl.value);
     if(!desc || !amt) return;
     const d = await fetchDay(jy,jm,jd);
-    d.expenses.push({ id: 'e'+Date.now(), desc, amount: amt });
+    if(editingExpenseId){
+      const item = d.expenses.find(e=>e.id===editingExpenseId);
+      if(item){ item.desc = desc; item.amount = amt; }
+      editingExpenseId = null;
+    } else {
+      d.expenses.push({ id: 'e'+Date.now(), desc, amount: amt });
+    }
     await saveDay(jy,jm,jd,d);
     renderFinanceView();
   }
   async function removeExpense(id){
+    if(editingExpenseId === id) editingExpenseId = null;
     const d = await fetchDay(jy,jm,jd);
     d.expenses = d.expenses.filter(e=>e.id!==id);
     await saveDay(jy,jm,jd,d);
@@ -1850,17 +2268,25 @@ async function renderFinanceView(){
     if(!desc || !amt) return;
     const d = await fetchDay(jy,jm,jd);
     d.income = d.income || [];
-    d.income.push({ id: 'i'+Date.now(), desc, amount: amt });
+    if(editingIncomeId){
+      const item = d.income.find(e=>e.id===editingIncomeId);
+      if(item){ item.desc = desc; item.amount = amt; }
+      editingIncomeId = null;
+    } else {
+      d.income.push({ id: 'i'+Date.now(), desc, amount: amt });
+    }
     await saveDay(jy,jm,jd,d);
     renderFinanceView();
   }
   async function removeIncome(id){
+    if(editingIncomeId === id) editingIncomeId = null;
     const d = await fetchDay(jy,jm,jd);
     d.income = (d.income||[]).filter(e=>e.id!==id);
     await saveDay(jy,jm,jd,d);
     renderFinanceView();
   }
 }
+
 async function monthIncomeTotal(jy,jm){
   const daysInMonth = jDaysInMonth(jy,jm);
   let total = 0;
@@ -1975,7 +2401,7 @@ async function renderMonthView(){
   const ICON_CONVERT = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 15l3 3-3 3M13 15l-3 3 3 3"/></svg>`;
   gridHtml += `</div><div class="month-bottom-row">
     <div class="mb-icon-btn" id="openConverterTab">${ICON_CONVERT}</div>
-    <div class="mb-stat"><div class="mb-label">این ماه</div><div class="mb-value">${fmtCompact(monthTotal)}</div></div>
+    <div class="mb-stat" id="openMonthReportBtn"><div class="mb-label">${jMonthNames[jm-1]}</div><div class="mb-value">${fmtCompact(monthTotal)}</div></div>
     <div class="mb-stat"><div class="mb-label">امسال</div><div class="mb-value">${fmtCompact(yearTotal)}</div></div>
   </div>`;
 
@@ -1996,7 +2422,41 @@ async function renderMonthView(){
   document.getElementById('openConverterTab').addEventListener('click', ()=>{
     setView('converter', anchor);
   });
+  document.getElementById('openMonthReportBtn').addEventListener('click', ()=>{
+    openMonthReportModal(jy, jm);
+  });
 }
+
+/* ---------- Month expense report modal ---------- */
+async function openMonthReportModal(jy,jm){
+  document.getElementById('monthReportTitle').textContent = `📊 گزارش هزینه‌های ${jMonthNames[jm-1]}`;
+  const daysInMonth = jDaysInMonth(jy,jm);
+  let total = 0;
+  let html = '';
+  for(let d=1; d<=daysInMonth; d++){
+    const data = await fetchDay(jy,jm,d);
+    if(!data.expenses.length) continue;
+    const dayTotal = data.expenses.reduce((s,e)=>s+Number(e.amount||0),0);
+    total += dayTotal;
+    html += `<div class="report-day-group">
+      <div class="report-day-label">${d} ${jMonthNames[jm-1]} — ${fmtAmount(dayTotal)} تومان</div>
+      ${data.expenses.map(e=>`
+        <div class="expense-row">
+          <div class="expense-desc">${e.desc}</div>
+          <div class="expense-amt">${fmtAmount(e.amount)} تومان</div>
+        </div>`).join('')}
+    </div>`;
+  }
+  document.getElementById('monthReportTotal').textContent = `جمع کل: ${fmtAmount(total)} تومان`;
+  document.getElementById('monthReportList').innerHTML = html || `<div class="empty-note">این ماه هنوز هزینه‌ای ثبت نشده</div>`;
+  document.getElementById('monthReportModal').classList.add('open');
+}
+document.getElementById('monthReportModalClose').addEventListener('click', ()=>{
+  document.getElementById('monthReportModal').classList.remove('open');
+});
+document.getElementById('monthReportModal').addEventListener('click', (e)=>{
+  if(e.target.id === 'monthReportModal') document.getElementById('monthReportModal').classList.remove('open');
+});
 
 /* ---------- Month-cell emoji picker ---------- */
 const MONTH_EMOJI_LIST = ['😂','😍','❤️','🌹','😉','🤲🏻','💪','🤍','🥹','🥰','🙂','😇','😃','🤨','🥳','😡','😈','🙏🏻','👁️','☹️'];
@@ -2032,6 +2492,64 @@ document.getElementById('monthEmojiModal').addEventListener('click', (e)=>{
 });
 
 /* ---------- GOALS PAGE (year-round, always visible) ---------- */
+/* ---------- FUTURE REMINDERS (separate from goals — date + time triggered) ---------- */
+function loadFutureReminders(){
+  const raw = lsGet('reminders_list');
+  return raw ? JSON.parse(raw) : [];
+}
+function saveFutureReminders(list){ lsSet('reminders_list', JSON.stringify(list)); }
+function dueReminders(){
+  const list = loadFutureReminders();
+  const nowTs = Date.now();
+  const todaySerial = tJy*372 + tJm*31 + tJd;
+  return list.filter(r=>{
+    if(!r.active || !r.targetJy) return false;
+    const targetSerial = r.targetJy*372 + r.targetJm*31 + r.targetJd;
+    if(targetSerial > todaySerial) return false;
+    if(targetSerial === todaySerial && r.alarmTime){
+      const [hh,mm] = r.alarmTime.split(':').map(Number);
+      const now = new Date();
+      if(now.getHours()*60+now.getMinutes() < hh*60+mm) return false;
+    }
+    if(r.firstShownAt && (nowTs - r.firstShownAt) > 6*3600*1000) return false;
+    return true;
+  });
+}
+function cleanupExpiredReminders(){
+  const list = loadFutureReminders();
+  let changed = false;
+  const nowTs = Date.now();
+  list.forEach(r=>{
+    if(r.active && r.firstShownAt && (nowTs - r.firstShownAt) > 6*3600*1000){
+      r.active = false; changed = true;
+    }
+  });
+  if(changed) saveFutureReminders(list);
+}
+function maybeShowReminderPopup(){
+  cleanupExpiredReminders();
+  const due = dueReminders();
+  if(!due.length) return;
+  const list = loadFutureReminders();
+  let changed = false;
+  due.forEach(r=>{
+    const item = list.find(x=>x.id===r.id);
+    if(item && !item.firstShownAt){ item.firstShownAt = Date.now(); changed = true; }
+  });
+  if(changed) saveFutureReminders(list);
+  document.getElementById('reminderPopupList').innerHTML = due.map(r=>{
+    const dateLabel = `${r.targetJd} ${jMonthNames[r.targetJm-1]} ${r.targetJy}`;
+    return `<div class="reminder-popup-item"><b>${r.text}</b><span>${dateLabel}${r.alarmTime?` · ${r.alarmTime}`:''}</span></div>`;
+  }).join('');
+  document.getElementById('reminderPopupOverlay').classList.add('open');
+  clearTimeout(window.__reminderPopupTimer);
+  window.__reminderPopupTimer = setTimeout(closeReminderPopup, 10000);
+}
+function closeReminderPopup(){
+  document.getElementById('reminderPopupOverlay').classList.remove('open');
+  clearTimeout(window.__reminderPopupTimer);
+}
+
 function loadGoals(){
   const raw = lsGet('goals');
   return raw ? JSON.parse(raw) : [];
@@ -2062,12 +2580,14 @@ function maybeShowGoalsReminder(){
     try{ new Notification('یادآوری اهداف', { body: names }); }catch(e){}
   }
 }
+let editingGoalId = null;
 async function renderGoalsView(){
   document.getElementById('titleMain').textContent = 'اهداف';
   document.getElementById('titleSub').textContent = '';
 
   const goals = loadGoals();
   const activeCount = goals.filter(g=>g.active).length;
+  const editingGoal = editingGoalId ? goals.find(g=>g.id===editingGoalId) : null;
   let html = `<button class="subtab-back" id="backToMonthBtn">→ بازگشت به ماه</button>`;
 
   html += `<div class="goals-summary-card">
@@ -2080,17 +2600,20 @@ async function renderGoalsView(){
 
   html += `<div class="reminder-note" style="margin-bottom:16px;">هدف‌هایی که فعالشون کنی، هر روز بالای صفحه‌ی روزانه‌ت و یه اعلان کوتاه بالای صفحه نشونت داده می‌شن (وقتی این صفحه بازه). برای یادآوری واقعی حتی با گوشی خاموش/سایلنت، بگو کدوم هدف رو بخوای، توی اپ Reminders گوشیت هم ثبتش می‌کنم.</div>`;
 
-  html += `<div class="section"><div class="section-title">افزودن هدف جدید</div>
-    <input type="text" id="goalTextInput" placeholder="مثلاً: یادگیری زبان انگلیسی تا سطح پیشرفته" style="width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper-2);font-family:'Vazirmatn',sans-serif;font-size:14px;color:var(--ink);outline:none;margin-bottom:8px;">
+  html += `<div class="section"><div class="section-title">${editingGoal ? 'ویرایش هدف' : 'افزودن هدف جدید'}</div>
+    <input type="text" id="goalTextInput" placeholder="مثلاً: یادگیری زبان انگلیسی تا سطح پیشرفته" value="${editingGoal ? editingGoal.text.replace(/"/g,'&quot;') : ''}" style="width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper-2);font-family:'Vazirmatn',sans-serif;font-size:14px;color:var(--ink);outline:none;margin-bottom:8px;">
     <div class="conv-fields" style="margin-bottom:8px;">
-      <input type="number" id="goalDay" placeholder="روز" min="1" max="31">
+      <input type="number" id="goalDay" placeholder="روز" min="1" max="31" value="${editingGoal && editingGoal.targetJd ? editingGoal.targetJd : ''}">
       <select id="goalMonth">
         <option value="">ماه</option>
-        ${jMonthNames.map((n,i)=>`<option value="${i+1}">${n}</option>`).join('')}
+        ${jMonthNames.map((n,i)=>`<option value="${i+1}" ${editingGoal && editingGoal.targetJm===i+1?'selected':''}>${n}</option>`).join('')}
       </select>
-      <input type="number" id="goalYear" placeholder="سال" value="${tJy}">
+      <input type="number" id="goalYear" placeholder="سال" value="${editingGoal && editingGoal.targetJy ? editingGoal.targetJy : (editingGoal ? '' : tJy)}">
     </div>
-    <button class="alarm-save-btn" id="addGoalBtn">+ افزودن هدف</button>
+    <div style="display:flex; gap:8px;">
+      <button class="alarm-save-btn" id="addGoalBtn" style="margin-top:0;">${editingGoal ? '✓ ذخیره ویرایش' : '+ افزودن هدف'}</button>
+      ${editingGoal ? `<button class="pill-btn" id="cancelEditGoalBtn" style="flex-shrink:0;">لغو</button>` : ''}
+    </div>
   </div>`;
 
   html += `<div class="section"><div class="section-title">لیست اهداف</div><div id="goalsList">`;
@@ -2098,7 +2621,7 @@ async function renderGoalsView(){
     html += `<div class="empty-note">هنوز هدفی ننوشتی</div>`;
   } else {
     const todaySerial = tJy*372 + tJm*31 + tJd;
-    goals.forEach(g=>{
+    goals.forEach((g,idx)=>{
       const hasDate = g.targetJy && g.targetJm && g.targetJd;
       const dateLabel = hasDate ? `${g.targetJd} ${jMonthNames[g.targetJm-1]} ${g.targetJy}` : '';
       let daysLabel = '';
@@ -2108,13 +2631,18 @@ async function renderGoalsView(){
         daysLabel = diff > 0 ? `${diff} روز مونده` : diff === 0 ? 'امروزه!' : `${-diff} روز گذشته`;
       }
       html += `
-        <div class="goal-card ${g.active?'active':''}">
+        <div class="goal-card ${g.active?'active':''}${g.id===editingGoalId?' editing':''}">
           <div class="goal-check ${g.active?'checked':''}" data-id="${g.id}" data-act="goal-toggle">${g.active?'✓':''}</div>
           <div class="goal-body" data-id="${g.id}" data-act="goal-toggle">
             <div class="goal-text">${g.text}</div>
             ${hasDate ? `<div class="goal-date">📅 ${dateLabel} · ${daysLabel}</div>` : ''}
           </div>
-          <span class="chip-remove" data-id="${g.id}" data-act="goal-remove">✕</span>
+          <div class="goal-actions">
+            <span class="goal-action-btn" data-id="${g.id}" data-act="goal-up" ${idx===0?'style="opacity:0.25;pointer-events:none;"':''}>▲</span>
+            <span class="goal-action-btn" data-id="${g.id}" data-act="goal-down" ${idx===goals.length-1?'style="opacity:0.25;pointer-events:none;"':''}>▼</span>
+            <span class="goal-action-btn" data-id="${g.id}" data-act="goal-edit">✏️</span>
+            <span class="goal-action-btn remove" data-id="${g.id}" data-act="goal-remove">✕</span>
+          </div>
         </div>`;
     });
   }
@@ -2131,17 +2659,26 @@ async function renderGoalsView(){
     const text = textEl.value.trim();
     if(!text){ showToast('متن هدف رو بنویس'); return; }
     const list = loadGoals();
-    list.push({
-      id: 'goal'+Date.now(),
-      text,
-      active: false,
-      targetJy: yEl.value ? parseInt(yEl.value) : null,
-      targetJm: mEl.value ? parseInt(mEl.value) : null,
-      targetJd: dEl.value ? parseInt(dEl.value) : null,
-    });
+    const targetJy = yEl.value ? parseInt(yEl.value) : null;
+    const targetJm = mEl.value ? parseInt(mEl.value) : null;
+    const targetJd = dEl.value ? parseInt(dEl.value) : null;
+    if(editingGoalId){
+      const g = list.find(x=>x.id===editingGoalId);
+      if(g){ g.text = text; g.targetJy = targetJy; g.targetJm = targetJm; g.targetJd = targetJd; }
+      editingGoalId = null;
+    } else {
+      list.push({ id: 'goal'+Date.now(), text, active: false, targetJy, targetJm, targetJd });
+    }
     saveGoalsData(list);
     renderGoalsView();
   });
+
+  if(document.getElementById('cancelEditGoalBtn')){
+    document.getElementById('cancelEditGoalBtn').addEventListener('click', ()=>{
+      editingGoalId = null;
+      renderGoalsView();
+    });
+  }
 
   document.querySelectorAll('[data-act="goal-toggle"]').forEach(el=>{
     el.addEventListener('click', ()=>{
@@ -2155,12 +2692,211 @@ async function renderGoalsView(){
   document.querySelectorAll('[data-act="goal-remove"]').forEach(el=>{
     el.addEventListener('click', (e)=>{
       e.stopPropagation();
+      if(editingGoalId === el.dataset.id) editingGoalId = null;
       const list = loadGoals().filter(x=>x.id!==el.dataset.id);
       saveGoalsData(list);
       renderGoalsView();
     });
   });
+  document.querySelectorAll('[data-act="goal-edit"]').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      editingGoalId = el.dataset.id;
+      renderGoalsView();
+      setTimeout(()=>{
+        const box = document.getElementById('goalTextInput');
+        if(box){ box.focus(); box.scrollIntoView({behavior:'smooth', block:'center'}); }
+      }, 50);
+    });
+  });
+  document.querySelectorAll('[data-act="goal-up"]').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const list = loadGoals();
+      const i = list.findIndex(x=>x.id===el.dataset.id);
+      if(i > 0){ [list[i-1], list[i]] = [list[i], list[i-1]]; saveGoalsData(list); renderGoalsView(); }
+    });
+  });
+  document.querySelectorAll('[data-act="goal-down"]').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const list = loadGoals();
+      const i = list.findIndex(x=>x.id===el.dataset.id);
+      if(i !== -1 && i < list.length-1){ [list[i+1], list[i]] = [list[i], list[i+1]]; saveGoalsData(list); renderGoalsView(); }
+    });
+  });
 }
+
+
+/* ---------- SETTINGS MODAL ---------- */
+const FEATURE_LABELS = {
+  calorie: '🍽 کالری روزانه',
+  gymSets: '🏋️ ست‌های ورزشی',
+  finance: '💰 هزینه‌ها و درآمد',
+  goals: '🎯 اهداف',
+  note: '📝 یادداشت روزانه',
+  quote: '✨ جمله انگیزشی',
+  search: '🔍 جستجو',
+};
+function ensureDark(hex, maxL){
+  maxL = maxL || 0.42;
+  const {r,g,b} = hexToRgb(hex);
+  const L = hexLightness(hex);
+  if(L <= maxL) return hex;
+  const scale = maxL / L;
+  const rr = Math.max(0, Math.round(r*scale));
+  const gg = Math.max(0, Math.round(g*scale));
+  const bb = Math.max(0, Math.round(b*scale));
+  return '#' + [rr,gg,bb].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+let settingsOpenSection = null;
+function openSettingsModal(){
+  settingsOpenSection = null;
+  renderSettingsModalContent();
+  document.getElementById('settingsModal').classList.add('open');
+}
+function closeSettingsModal(){
+  document.getElementById('settingsModal').classList.remove('open');
+}
+function renderSettingsModalContent(){
+  const s = loadSettings();
+  let html = '';
+
+  // Collapsible: نمایش آیتم‌ها
+  const featuresOpen = settingsOpenSection === 'features';
+  html += `<div class="settings-accordion">
+    <div class="settings-accordion-head" data-section="features">
+      <span>نمایش آیتم‌ها</span><span class="acc-caret">${featuresOpen?'▲':'▼'}</span>
+    </div>`;
+  if(featuresOpen){
+    html += `<div class="settings-accordion-body">
+      <div class="reminder-note" style="margin-bottom:8px;">هر آیتمی رو خاموش کنی، دیگه نشون داده نمی‌شه؛ روشنش کنی، برمی‌گرده سر جاش.</div>`;
+    Object.keys(FEATURE_LABELS).forEach(key=>{
+      const on = s.features[key] !== false;
+      html += `
+        <div class="settings-row">
+          <span class="settings-row-label">${FEATURE_LABELS[key]}</span>
+          <div class="switch ${on?'on':''}" data-key="${key}"><div class="switch-knob"></div></div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+  html += `</div>`;
+
+  // Collapsible: تغییر رنگ
+  const colorOpen = settingsOpenSection === 'color';
+  html += `<div class="settings-accordion">
+    <div class="settings-accordion-head" data-section="color">
+      <span>تغییر رنگ</span><span class="acc-caret">${colorOpen?'▲':'▼'}</span>
+    </div>`;
+  if(colorOpen){
+    html += `<div class="settings-accordion-body">
+      <div class="reminder-note" style="margin-bottom:8px;">پس‌زمینه و متن اصلی طبق حالت شب/روز می‌مونه تا همیشه خوانا باشه؛ فقط رنگ دکمه‌ها و امروز/آینده عوض می‌شه.</div>
+      <div class="palette-grid-compact">
+        <div class="palette-item-sm ${!s.palette?'selected':''}" data-key="">
+          <div class="palette-swatches-sm"><span style="background:var(--forest)"></span><span style="background:var(--gold)"></span><span style="background:var(--future-bg)"></span></div>
+          <div class="palette-name-sm">پیش‌فرض</div>
+        </div>
+        ${Object.entries(PALETTES).map(([key,p])=>`
+          <div class="palette-item-sm ${s.palette===key?'selected':''}" data-key="${key}">
+            <div class="palette-swatches-sm">${p.colors.map(c=>`<span style="background:${c}"></span>`).join('')}</div>
+            <div class="palette-name-sm">${p.name}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+  html += `</div>`;
+
+  // Collapsible: نام و عکس پلنر
+  const idOpen = settingsOpenSection === 'identity';
+  html += `<div class="settings-accordion">
+    <div class="settings-accordion-head" data-section="identity">
+      <span>نام و عکس پلنر</span><span class="acc-caret">${idOpen?'▲':'▼'}</span>
+    </div>`;
+  if(idOpen){
+    html += `<div class="settings-accordion-body">
+      <div class="settings-row">
+        <span class="settings-row-label">نام شخصی‌سازی‌شده</span>
+        <div class="switch ${s.nameEnabled?'on':''}" id="nameEnabledSwitch"><div class="switch-knob"></div></div>
+      </div>
+      <input type="text" id="plannerNameInput" placeholder="اسمی که دوست داری" value="${s.plannerName.replace(/"/g,'&quot;')}" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper);font-family:'Vazirmatn',sans-serif;font-size:13px;color:var(--ink);outline:none;margin:8px 0;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="planner-avatar" id="avatarPreview" style="width:44px;height:44px;font-size:20px;${s.avatarDataUrl?`background-image:url(${s.avatarDataUrl});background-size:cover;`:''}">${s.avatarDataUrl?'':'👤'}</div>
+        <button class="pill-btn" id="pickAvatarBtn">انتخاب عکس پروفایل</button>
+        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
+      </div>
+      <div class="reminder-note" style="margin-top:8px;">اگه فعال نکنی، اسم پیش‌فرض «M&S» می‌مونه.</div>
+    </div>`;
+  }
+  html += `</div>`;
+
+  html += `<div class="reminder-note" style="margin-top:6px;">درباره‌ی Face ID و انتخاب زبان انگلیسی: این‌ها رو هنوز اضافه نکردم، چون واقعی و مطمئن پیاده‌سازی‌شون برای یه صفحه‌ی وب کار زیادی می‌بره — بعداً جدا در موردشون صحبت می‌کنیم.</div>`;
+
+
+
+  document.querySelectorAll('.settings-accordion-head').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const sec = el.dataset.section;
+      settingsOpenSection = (settingsOpenSection === sec) ? null : sec;
+      renderSettingsModalContent();
+    });
+  });
+  document.querySelectorAll('.switch').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const cur = loadSettings();
+      cur.features[el.dataset.key] = !(cur.features[el.dataset.key] !== false);
+      saveSettings(cur);
+      el.classList.toggle('on');
+    });
+  });
+  document.querySelectorAll('.palette-item-sm').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const cur = loadSettings();
+      cur.palette = el.dataset.key || null;
+      saveSettings(cur);
+      applyPalette(cur.palette);
+      renderSettingsModalContent();
+    });
+  });
+
+  if(document.getElementById('nameEnabledSwitch')){
+    document.getElementById('nameEnabledSwitch').addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const cur = loadSettings();
+      cur.nameEnabled = !cur.nameEnabled;
+      saveSettings(cur);
+      applyPlannerIdentity();
+      renderSettingsModalContent();
+    });
+    document.getElementById('plannerNameInput').addEventListener('input', (e)=>{
+      const cur = loadSettings();
+      cur.plannerName = e.target.value;
+      saveSettings(cur);
+      applyPlannerIdentity();
+    });
+    document.getElementById('pickAvatarBtn').addEventListener('click', (e)=>{
+      e.stopPropagation();
+      document.getElementById('avatarFileInput').click();
+    });
+    document.getElementById('avatarFileInput').addEventListener('change', (e)=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      resizeImageToDataUrl(file, 160, 0.75).then(dataUrl=>{
+        const cur = loadSettings();
+        cur.avatarDataUrl = dataUrl;
+        saveSettings(cur);
+        applyPlannerIdentity();
+        renderSettingsModalContent();
+      });
+    });
+  }
+}
+document.getElementById('settingsModalClose').addEventListener('click', closeSettingsModal);
+document.getElementById('settingsModal').addEventListener('click', (e)=>{
+  if(e.target.id === 'settingsModal') closeSettingsModal();
+});
 
 /* ---------- DATE CONVERTER TAB ---------- */
 async function renderConverterView(){
@@ -2298,10 +3034,10 @@ async function renderConverterView(){
 }
 
 
-/* ---------- Save button + save-on-close ---------- */
-document.getElementById('saveBtn').addEventListener('click', async ()=>{
-  if(window.__saveCurrentDayNote) await window.__saveCurrentDayNote();
-  showToast('✓ همه چیز ذخیره شد');
+/* ---------- Settings button + save-on-close ---------- */
+document.getElementById('settingsBtn').addEventListener('click', ()=>{
+  if(window.__saveCurrentDayNote) window.__saveCurrentDayNote();
+  openSettingsModal();
 });
 window.addEventListener('pagehide', ()=>{
   if(window.__saveCurrentDayNote) window.__saveCurrentDayNote();
@@ -2311,10 +3047,17 @@ window.addEventListener('visibilitychange', ()=>{
 });
 
 /* ---------- Init ---------- */
+document.getElementById('reminderPopupCloseBtn').addEventListener('click', closeReminderPopup);
+document.getElementById('reminderPopupOverlay').addEventListener('click', (e)=>{
+  if(e.target.id === 'reminderPopupOverlay') closeReminderPopup();
+});
 (async function init(){
   initTheme();
+  initPalette();
+  applyPlannerIdentity();
   await loadTasks();
   await renderAll();
+  setTimeout(maybeShowReminderPopup, 600);
 })();
 </script>
 </body>
